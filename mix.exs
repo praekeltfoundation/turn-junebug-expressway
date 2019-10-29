@@ -43,7 +43,8 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:jason, "~> 1.1"},
 
       # Dev/test/build tools.
-      {:excoveralls, "~> 0.8", only: :test}
+      {:excoveralls, "~> 0.8", only: :test},
+      {:credo, "~> 0.9", only: [:dev, :test], runtime: false}
     ]
   end
 
