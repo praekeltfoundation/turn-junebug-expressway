@@ -40,7 +40,10 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:jason, "~> 1.1"}
+      {:jason, "~> 1.1"},
+
+      # Dev/test/build tools.
+      {:excoveralls, "~> 0.8", only: :test}
     ]
   end
 
