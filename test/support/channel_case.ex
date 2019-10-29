@@ -15,6 +15,8 @@ defmodule TurnJunebugExpresswayWeb.ChannelCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with channels
@@ -25,13 +27,13 @@ defmodule TurnJunebugExpresswayWeb.ChannelCase do
     end
   end
 
-
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TurnJunebugExpressway.Repo)
+    :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
+
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
+      Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
     end
+
     :ok
   end
-
 end

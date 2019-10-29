@@ -10,7 +10,14 @@ defmodule TurnJunebugExpressway.Mixfile do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.json": :test,
+        "coveralls.detail": :test,
+        credo: :test
+      ],
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -40,7 +47,11 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:jason, "~> 1.1"}
+      {:jason, "~> 1.1"},
+
+      # Dev/test/build tools.
+      {:excoveralls, "~> 0.8", only: :test},
+      {:credo, "~> 0.9", only: [:dev, :test], runtime: false}
     ]
   end
 

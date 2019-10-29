@@ -14,6 +14,8 @@ defmodule TurnJunebugExpressway.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       alias TurnJunebugExpressway.Repo
@@ -26,10 +28,10 @@ defmodule TurnJunebugExpressway.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TurnJunebugExpressway.Repo)
+    :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
+      Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
     end
 
     :ok
