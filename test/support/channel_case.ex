@@ -26,10 +26,10 @@ defmodule TurnJunebugExpresswayWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TurnJunebugExpressway.Repo)
+    :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
+      Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
     end
 
     :ok
