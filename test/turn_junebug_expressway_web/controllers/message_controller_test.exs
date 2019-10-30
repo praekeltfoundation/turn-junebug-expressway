@@ -22,16 +22,27 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
     end
 
     test "success when hmac header is valid", %{} do
+      {:ok, data} =
+        Jason.encode(%{
+          "preview_url" => false,
+          "recipient_type" => "individual",
+          "text" => %{"body" => "text message content"},
+          "to" => "whatsapp_id",
+          "type" => "text"
+        })
+
       conn =
         build_conn()
         |> put_req_header(
           "http_x_engage_hook_signature",
-          "dgbfxbVUkQW91ViBGxxeUefGksPEWr3Fu9RHB7ciXns="
+          "jW/nhuaGDB2IMv2nBlzEngmBGiHX4cZeTsSHuiESTmc="
         )
-        |> post("/api/v1/send_message", test: "test")
+        |> put_req_header("content-type", "application/json")
+        |> post("/api/v1/send_message", data)
 
-      assert conn.status == 200
-      assert conn.resp_body =~ "success"
+      assert conn.status == 202
+      {:ok, response_body} = Jason.decode(conn.resp_body)
+      assert response_body == %{"messages" => [%{"id" => "long_random_message_id"}]}
     end
   end
 end

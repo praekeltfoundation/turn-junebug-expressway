@@ -18,3 +18,4 @@ jobs:
       otp_release: "20.3"
       services:
         - postgresql
+        - rabbitmq

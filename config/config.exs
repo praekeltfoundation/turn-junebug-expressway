@@ -29,3 +29,14 @@ config :phoenix, :json_library, Jason
 
 config :turn_junebug_expressway, :turn,
   hmac_secret: System.get_env("TURN_HMAC_SECRET") || "REPLACE_ME"
+
+config :turn_junebug_expressway, :junebug,
+  from_addr: System.get_env("JUNEBUG_FROM_ADDR") || "+2712345"
+
+config :turn_junebug_expressway, :rabbitmq,
+  messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",
+  host: System.get_env("AMQP_HOST") || "localhost",
+  port: System.get_env("AMQP_PORT") || 5672,
+  vhost: System.get_env("AMQP_VHOST") || "/",
+  user: System.get_env("AMQP_USER") || "guest",
+  password: System.get_env("AMQP_PASSWORD") || "guest"
