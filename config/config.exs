@@ -32,11 +32,10 @@ config :turn_junebug_expressway, :turn,
 
 config :turn_junebug_expressway, :junebug,
   from_addr: System.get_env("JUNEBUG_FROM_ADDR") || "+2712345",
-  transport_name: System.get_env("JUNEBUG_TRANSPORT_NAME") || "some_name",
   transport_type: System.get_env("JUNEBUG_TRANSPORT_TYPE") || "telnet"
 
 config :turn_junebug_expressway, :rabbitmq,
-  messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",
+  messages_queue: System.get_env("MESSAGES_QUEUE") || "test_messages_queue",
   host: System.get_env("AMQP_HOST") || "localhost",
   port: System.get_env("AMQP_PORT") || 5672,
   vhost: System.get_env("AMQP_VHOST") || "/",

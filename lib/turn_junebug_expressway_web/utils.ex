@@ -40,7 +40,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
        "timestamp" => DateTime.to_string(today),
        "in_reply_to" => nil,
        "session_event" => nil,
-       "transport_name" => get_env(:junebug, :transport_name),
+       "transport_name" => get_env(:rabbitmq, :messages_queue),
        "transport_type" => get_env(:junebug, :transport_type),
        "transport_metadata" => %{}
      }}

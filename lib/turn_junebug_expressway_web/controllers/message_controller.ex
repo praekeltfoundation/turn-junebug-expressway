@@ -23,8 +23,6 @@ defmodule TurnJunebugExpresswayWeb.MessageController do
         })
 
       {:error, message} ->
-        {403, message}
-
         conn
         |> send_resp(403, message)
         |> halt()
