@@ -27,7 +27,7 @@ defmodule TurnJunebugExpressway.Mixfile do
   def application do
     [
       mod: {TurnJunebugExpressway.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :jason]
     ]
   end
 
@@ -40,14 +40,15 @@ defmodule TurnJunebugExpressway.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.0"},
-      {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.2"},
-      {:postgrex, ">= 0.0.0"},
+      {:phoenix, "~> 1.4.0"},
+      {:phoenix_pubsub, "~> 1.1"},
+      {:ecto_sql, "~> 3.0"},
+      {:phoenix_ecto, "~> 4.0"},
+      {:postgrex, ">= 0.15.0"},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"},
-      {:plug_cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 2.1"},
       {:jason, "~> 1.1"},
+      {:amqp, "~> 1.3"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},

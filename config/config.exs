@@ -25,5 +25,7 @@ config :logger, :console,
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
 
+config :phoenix, :json_library, Jason
+
 config :turn_junebug_expressway, :turn,
   hmac_secret: System.get_env("TURN_HMAC_SECRET") || "REPLACE_ME"

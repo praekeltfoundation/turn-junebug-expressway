@@ -1,5 +1,7 @@
 defmodule TurnJunebugExpressway.Repo do
-  use Ecto.Repo, otp_app: :turn_junebug_expressway
+  use Ecto.Repo,
+    otp_app: :turn_junebug_expressway,
+    adapter: Ecto.Adapters.Postgres
 
   @doc """
   Dynamically loads the repository url from the
