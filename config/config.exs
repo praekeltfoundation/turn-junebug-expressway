@@ -31,7 +31,9 @@ config :turn_junebug_expressway, :turn,
   hmac_secret: System.get_env("TURN_HMAC_SECRET") || "REPLACE_ME"
 
 config :turn_junebug_expressway, :junebug,
-  from_addr: System.get_env("JUNEBUG_FROM_ADDR") || "+2712345"
+  from_addr: System.get_env("JUNEBUG_FROM_ADDR") || "+2712345",
+  transport_name: System.get_env("JUNEBUG_TRANSPORT_NAME") || "some_name",
+  transport_type: System.get_env("JUNEBUG_TRANSPORT_TYPE") || "telnet"
 
 config :turn_junebug_expressway, :rabbitmq,
   messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",

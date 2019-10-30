@@ -27,14 +27,22 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def format_message(conn) do
     {:ok, body} = Jason.decode(conn.private[:raw_body])
 
+    today = DateTime.utc_now()
+
     {:ok,
      %{
        "content" => get_in(body, ["text", "body"]),
-       "message_version" => "1",
+       "message_version" => "20110921",
+       "message_type" => "user_message",
        "to_addr" => get_in(body, ["to"]),
        "from_addr" => get_env(:junebug, :from_addr),
-       # TODO: randomly generate this:
-       "message_id" => "long_random_message_id"
+       "message_id" => Ecto.UUID.generate(),
+       "timestamp" => DateTime.to_string(today),
+       "in_reply_to" => nil,
+       "session_event" => nil,
+       "transport_name" => get_env(:junebug, :transport_name),
+       "transport_type" => get_env(:junebug, :transport_type),
+       "transport_metadata" => %{}
      }}
   end
 

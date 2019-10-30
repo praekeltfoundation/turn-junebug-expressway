@@ -41,8 +41,9 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
         |> post("/api/v1/send_message", data)
 
       assert conn.status == 202
-      {:ok, response_body} = Jason.decode(conn.resp_body)
-      assert response_body == %{"messages" => [%{"id" => "long_random_message_id"}]}
+      {:ok, %{"messages" => [%{"id" => message_id}]}} = Jason.decode(conn.resp_body)
+
+      assert message_id != nil
     end
   end
 end
