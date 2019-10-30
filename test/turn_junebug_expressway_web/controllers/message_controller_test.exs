@@ -3,6 +3,16 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
 
   alias TurnJunebugExpresswayWeb.Utils
 
+  setup %{conn: conn} do
+    queue_name = Utils.get_env(:rabbitmq, :messages_queue)
+
+    {:ok, connection} = AMQP.Connection.open(Utils.get_env(:rabbitmq, :urn))
+    {:ok, channel} = AMQP.Channel.open(connection)
+    AMQP.Queue.declare(channel, "#{queue_name}.outbound")
+
+    {:ok, conn: conn}
+  end
+
   describe "validate hmac signature in header" do
     test "error when hmac header is invalid", %{} do
       conn =
