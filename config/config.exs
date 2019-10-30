@@ -36,8 +36,4 @@ config :turn_junebug_expressway, :junebug,
 
 config :turn_junebug_expressway, :rabbitmq,
   messages_queue: System.get_env("MESSAGES_QUEUE") || "test_messages_queue",
-  host: System.get_env("AMQP_HOST") || "localhost",
-  port: System.get_env("AMQP_PORT") || 5672,
-  vhost: System.get_env("AMQP_VHOST") || "/",
-  user: System.get_env("AMQP_USER") || "guest",
-  password: System.get_env("AMQP_PASSWORD") || "guest"
+  urn: "amqp://guest:guest@localhost:5672/%2f"

@@ -47,15 +47,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def send_message(message) do
-    options = [
-      host: get_env(:rabbitmq, :host),
-      port: get_env(:rabbitmq, :port),
-      virtual_host: get_env(:rabbitmq, :vhost),
-      username: get_env(:rabbitmq, :user),
-      password: get_env(:rabbitmq, :password)
-    ]
-
-    {:ok, connection} = AMQP.Connection.open(options, :undefined)
+    {:ok, connection} = AMQP.Connection.open(get_env(:rabbitmq, :urn))
     {:ok, channel} = AMQP.Channel.open(connection)
 
     queue_name = get_env(:rabbitmq, :messages_queue)
