@@ -34,6 +34,5 @@ config :turn_junebug_expressway, :junebug,
   from_addr: System.get_env("JUNEBUG_FROM_ADDR") || "+2712345",
   transport_type: System.get_env("JUNEBUG_TRANSPORT_TYPE") || "telnet"
 
-config :turn_junebug_expressway, :rabbitmq,
-  messages_queue: System.get_env("MESSAGES_QUEUE") || "test_messages_queue",
-  urn: "amqp://guest:guest@localhost:5672/%2f"
+config :turn_junebug_expressway,
+  message_engine: TurnJunebugExpressway.MessageEngine

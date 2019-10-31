@@ -62,3 +62,8 @@ config :logger, level: :info
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"
+
+config :turn_junebug_expressway, :rabbitmq,
+  exchange_name: "vumi",
+  messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",
+  urn: System.get_env("AMQP_URN") || "amqp://guest:guest@localhost1:5672/%2f"
