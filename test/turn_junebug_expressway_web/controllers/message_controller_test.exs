@@ -7,8 +7,7 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
     exchange_name = Utils.get_env(:rabbitmq, :exchange_name)
     queue_name = Utils.get_env(:rabbitmq, :messages_queue)
 
-    connection = TurnJunebugExpressway.MessageEngine.get_connection()
-    {:ok, channel} = AMQP.Channel.open(connection)
+    channel = TurnJunebugExpressway.MessageEngine.get_channel()
 
     AMQP.Queue.declare(channel, "#{queue_name}.outbound")
     AMQP.Exchange.declare(channel, exchange_name)

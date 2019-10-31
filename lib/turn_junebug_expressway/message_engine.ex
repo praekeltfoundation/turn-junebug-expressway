@@ -25,17 +25,15 @@ defmodule TurnJunebugExpressway.MessageEngine do
     GenServer.call(__MODULE__, {:publish_message, message})
   end
 
-  def get_connection do
+  def get_channel do
     GenServer.call(__MODULE__, :get)
   end
 
-  def handle_call(:get, _, conn) do
-    {:reply, conn, conn}
+  def handle_call(:get, _, channel) do
+    {:reply, channel, channel}
   end
 
-  def handle_call({:publish_message, message}, _from, conn) do
-    {:ok, channel} = AMQP.Channel.open(conn)
-
+  def handle_call({:publish_message, message}, _from, channel) do
     AMQP.Basic.publish(
       channel,
       @exchange_name,
@@ -43,15 +41,18 @@ defmodule TurnJunebugExpressway.MessageEngine do
       Jason.encode!(message)
     )
 
-    {:reply, conn, conn}
+    {:reply, channel, channel}
   end
 
-  def handle_info(:connect, _conn) do
+  def handle_info(:connect, _channel) do
     case Connection.open(@host) do
       {:ok, conn} ->
         # Get notifications when the connection goes down
         Process.monitor(conn.pid)
-        {:noreply, conn}
+
+        {:ok, channel} = AMQP.Channel.open(conn)
+
+        {:noreply, channel}
 
       {:error, _} ->
         Logger.error("Failed to connect #{@host}. Reconnecting later...")
