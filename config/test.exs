@@ -17,3 +17,8 @@ config :turn_junebug_expressway, TurnJunebugExpressway.Repo,
   database: "turn_junebug_expressway_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :turn_junebug_expressway, :rabbitmq,
+  exchange_name: "test_exchange",
+  messages_queue: "test_messages_queue",
+  urn: "amqp://guest:guest@localhost:5672/%2f"

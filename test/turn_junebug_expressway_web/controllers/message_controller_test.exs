@@ -4,13 +4,16 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
   alias TurnJunebugExpresswayWeb.Utils
 
   setup %{conn: conn} do
+    exchange_name = Utils.get_env(:rabbitmq, :exchange_name)
     queue_name = Utils.get_env(:rabbitmq, :messages_queue)
 
-    {:ok, connection} = AMQP.Connection.open(Utils.get_env(:rabbitmq, :urn))
-    {:ok, channel} = AMQP.Channel.open(connection)
-    AMQP.Queue.declare(channel, "#{queue_name}.outbound")
+    channel = TurnJunebugExpressway.MessageEngine.get_channel()
 
-    {:ok, conn: conn}
+    AMQP.Queue.declare(channel, "#{queue_name}.outbound")
+    AMQP.Exchange.declare(channel, exchange_name)
+    AMQP.Queue.bind(channel, "#{queue_name}.outbound", exchange_name)
+
+    {:ok, conn: conn, channel: channel}
   end
 
   describe "validate hmac signature in header" do
@@ -33,7 +36,7 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
       assert conn.resp_body =~ "missing hmac signature"
     end
 
-    test "success when hmac header is valid", %{} do
+    test "success when hmac header is valid", %{channel: channel} do
       {:ok, data} =
         Jason.encode(%{
           "preview_url" => false,
@@ -43,12 +46,12 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
           "type" => "text"
         })
 
-      {:ok, connection} = AMQP.Connection.open(Utils.get_env(:rabbitmq, :urn))
-      {:ok, channel} = AMQP.Channel.open(connection)
-
       queue_name = Utils.get_env(:rabbitmq, :messages_queue)
 
       AMQP.Queue.subscribe(channel, "#{queue_name}.outbound", fn payload, _meta ->
+        # TODO: fix this test, this never gets executed.
+        # it does work when running locally
+
         {:ok,
          %{
            "content" => content,
@@ -92,8 +95,6 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
       {:ok, %{"messages" => [%{"id" => message_id}]}} = Jason.decode(conn.resp_body)
 
       assert message_id != nil
-
-      AMQP.Connection.close(connection)
     end
   end
 end

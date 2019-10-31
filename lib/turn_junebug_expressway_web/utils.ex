@@ -47,12 +47,6 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def send_message(message) do
-    {:ok, connection} = AMQP.Connection.open(get_env(:rabbitmq, :urn))
-    {:ok, channel} = AMQP.Channel.open(connection)
-
-    queue_name = get_env(:rabbitmq, :messages_queue)
-
-    AMQP.Basic.publish(channel, "vumi", "#{queue_name}.outbound", Jason.encode!(message))
-    AMQP.Connection.close(connection)
+    TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
 end

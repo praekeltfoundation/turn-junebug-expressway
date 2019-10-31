@@ -44,3 +44,8 @@ config :turn_junebug_expressway, TurnJunebugExpressway.Repo,
   database: "turn_junebug_expressway_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :turn_junebug_expressway, :rabbitmq,
+  exchange_name: "vumi",
+  messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",
+  urn: System.get_env("AMQP_URN") || "amqp://guest:guest@localhost1:5672/%2f"
