@@ -70,8 +70,17 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
 
+  def get_event_timestamp(event) do
+    event
+    |> Map.get("timestamp")
+    |> Timex.parse!("%Y-%m-%d %H:%M:%S.%f", :strftime)
+    |> DateTime.from_naive!("Etc/UTC")
+    |> DateTime.to_unix()
+    |> to_string()
+  end
+
   def forward_event(payload) do
-    {:ok, body} = Jason.decode(payload)
+    {:ok, event} = Jason.decode(payload)
 
     status =
       %{
@@ -79,22 +88,16 @@ defmodule TurnJunebugExpresswayWeb.Utils do
         "nack" => "failed",
         "delivery_report" => "delivered"
       }
-      |> Map.get(Map.get(body, "event_type"))
-
-    timestamp =
-      Timex.parse!(Map.get(body, "timestamp"), "%Y-%m-%d %H:%M:%S.%f", :strftime)
-      |> DateTime.from_naive!("Etc/UTC")
-      |> DateTime.to_unix()
-      |> to_string()
+      |> Map.get(Map.get(event, "event_type"))
 
     turn_client()
     |> post(get_env(:turn, :url), %{
       "statuses" => [
         %{
-          "id" => Map.get(body, "user_message_id"),
+          "id" => Map.get(event, "user_message_id"),
           "recipient_id" => nil,
           "status" => status,
-          "timestamp" => timestamp
+          "timestamp" => get_event_timestamp(event)
         }
       ]
     })
