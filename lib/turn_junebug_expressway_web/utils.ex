@@ -1,4 +1,24 @@
 defmodule TurnJunebugExpresswayWeb.Utils do
+  use Tesla
+
+  def turn_client() do
+    default_middleware = [
+      Tesla.Middleware.JSON
+    ]
+
+    middleware =
+      case Mix.env() do
+        :prod ->
+          default_middleware
+          |> Enum.concat([{Tesla.Middleware.Timeout, [timeout: 2000]}])
+
+        _ ->
+          default_middleware
+      end
+
+    Tesla.client(middleware)
+  end
+
   def get_env(section, key) do
     Application.get_env(:turn_junebug_expressway, section)[key]
   end
@@ -48,5 +68,35 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
   def send_message(message) do
     TurnJunebugExpressway.MessageEngine.publish_message(message)
+  end
+
+  def forward_event(payload) do
+    {:ok, body} = Jason.decode(payload)
+
+    status =
+      %{
+        "ack" => "submitted",
+        "nack" => "failed",
+        "delivery_report" => "delivered"
+      }
+      |> Map.get(Map.get(body, "event_type"))
+
+    timestamp =
+      Timex.parse!(Map.get(body, "timestamp"), "%Y-%m-%d %H:%M:%S.%f", :strftime)
+      |> DateTime.from_naive!("Etc/UTC")
+      |> DateTime.to_unix()
+      |> to_string()
+
+    turn_client()
+    |> post(get_env(:turn, :url), %{
+      "statuses" => [
+        %{
+          "id" => Map.get(body, "user_message_id"),
+          "recipient_id" => nil,
+          "status" => status,
+          "timestamp" => timestamp
+        }
+      ]
+    })
   end
 end
