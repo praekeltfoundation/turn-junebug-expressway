@@ -90,16 +90,26 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       }
       |> Map.get(Map.get(event, "event_type"))
 
-    turn_client()
-    |> post(get_env(:turn, :url), %{
-      "statuses" => [
-        %{
-          "id" => Map.get(event, "user_message_id"),
-          "recipient_id" => nil,
-          "status" => status,
-          "timestamp" => get_event_timestamp(event)
-        }
-      ]
-    })
+    case turn_client()
+         |> post(get_env(:turn, :url), %{
+           "statuses" => [
+             %{
+               "id" => Map.get(event, "user_message_id"),
+               "recipient_id" => nil,
+               "status" => status,
+               "timestamp" => get_event_timestamp(event)
+             }
+           ]
+         }) do
+      {:ok, %Tesla.Env{status: status}}
+      when status in 200..299 ->
+        :ok
+
+      {:ok, %Tesla.Env{status: status} = reason} ->
+        {:error, status, reason}
+
+      {:error, %Tesla.Env{status: status} = reason} ->
+        {:error, status, reason}
+    end
   end
 end

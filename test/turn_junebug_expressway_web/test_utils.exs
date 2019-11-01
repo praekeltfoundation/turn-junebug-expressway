@@ -46,7 +46,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         }
       end)
 
-      Utils.forward_event(Jason.encode!(event))
+      :ok = Utils.forward_event(Jason.encode!(event))
     end
   end
 end

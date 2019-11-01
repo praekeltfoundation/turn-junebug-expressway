@@ -88,8 +88,15 @@ defmodule TurnJunebugExpressway.MessageEngine do
   end
 
   defp consume(channel, tag, redelivered, payload) do
-    Utils.forward_event(payload)
-    :ok = Basic.ack(channel, tag)
+    :ok =
+      case Utils.forward_event(payload) do
+        :ok ->
+          Basic.ack(channel, tag)
+
+        {:error, status, reason} ->
+          IO.puts("Error sending event: #{status} -> #{reason}")
+          Basic.reject(channel, tag, requeue: not redelivered)
+      end
   rescue
     _exception ->
       :ok = Basic.reject(channel, tag, requeue: not redelivered)
