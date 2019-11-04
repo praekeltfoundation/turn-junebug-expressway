@@ -48,7 +48,7 @@ jobs:
       dist: trusty
       services: [docker]
       env:
-        - IMAGE_NAME=praekeltfoundation/turn-junebug-expressway:develop
+        - IMAGE_NAME=praekeltfoundation/turn-junebug-expressway
         - REGISTRY_USER=praekeltorgdeploy
         # REGISTRY_PASS
         - secure: "B3IR0i4DCzAvX4FDSqf2mCBNHYK/kBDO8dnnKMs6ogOlpBYFW5RUsA8Z+xY/Lthns/TXC0W9/qslxowZrmm+7dnj6FhZH7CT2e7ZR9di1J4ZJpZAHY4dc3h8G3lNcwamurKJDxRXbGM3RpWR9s5hDVeKEzI2YHsrlJRlXeX17QEc8ohA1y2vyfYR0oic+NmR0lizjTtN4SM30Bw5r1fjVEpwPY59ylI6nQc+giFHoYrCxetiQ6BB22+ADyhvQhQ52qOJJTbTyMFsoac6EVCgPjSdXitMx6uFFvM80VxR7QsJ1q6mpJl8Ajf2cfN6W2mKyA5tzKAoLhjTwA731FmE0LEzbtMd2umvNuX2Ts2R+yOx2tA8dsZJNwSojTKDOfnXcmZQPhXuUBt0FUInXk4N9saJVLUinBWMv9psODS2MXP3+wpwugmiTAZmJSHnW3MYvYxbBxKjXZ0hjZgkpY5gIGg6dzMHV1MtGJQq2FEWAK+wzGQsPnDozhIGuqxdeRZKamKgWXQNNBuE99xT6ho7GUz5wW/2W8Nk7zGcvBgo/jyqNleB3tBucOBSdQmfZxLpAj0EugIRwv4Miwsj5Ya/khN/QXglDtSoSf6Z/FgQ9ETjSUbx7QXmT/0JA7A6sSVJTuNFM9DcwQDs5nYEYnioq6ugieLE/DCnLwmm09KVNxA="
