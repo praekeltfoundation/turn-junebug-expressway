@@ -63,37 +63,63 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     |> to_string()
   end
 
-  def forward_event(payload) do
-    {:ok, event} = Jason.decode(payload)
-
+  def get_event_status(event) do
     status =
       %{
         "ack" => "sent",
         "nack" => "failed",
-        "delivery_report" => "delivered"
+        "delivery_report" => "delivery_report"
       }
       |> Map.get(Map.get(event, "event_type"))
 
-    case @client.client()
-         |> @client.post("", %{
-           "statuses" => [
-             %{
-               "id" => Map.get(event, "user_message_id"),
-               "recipient_id" => nil,
-               "status" => status,
-               "timestamp" => get_event_timestamp(event)
-             }
-           ]
-         }) do
-      {:ok, %Tesla.Env{status: status}}
-      when status in 200..299 ->
+    case status do
+      "delivery_report" ->
+        status =
+          %{
+            "failed" => "failed",
+            "delivered" => "delivered"
+          }
+          |> Map.get(Map.get(event, "delivery_status"))
+
+        case status do
+          nil -> {:ignore, status}
+          status -> {:ok, status}
+        end
+
+      status ->
+        {:ok, status}
+    end
+  end
+
+  def forward_event(payload) do
+    {:ok, event} = Jason.decode(payload)
+
+    case event |> get_event_status do
+      {:ignore, _} ->
         :ok
 
-      {:ok, %Tesla.Env{status: status} = reason} ->
-        {:error, status, reason}
+      {:ok, status} ->
+        case @client.client()
+             |> @client.post("", %{
+               "statuses" => [
+                 %{
+                   "id" => Map.get(event, "user_message_id"),
+                   "recipient_id" => nil,
+                   "status" => status,
+                   "timestamp" => get_event_timestamp(event)
+                 }
+               ]
+             }) do
+          {:ok, %Tesla.Env{status: status}}
+          when status in 200..299 ->
+            :ok
 
-      {:error, %Tesla.Env{status: status} = reason} ->
-        {:error, status, reason}
+          {:ok, %Tesla.Env{status: status} = reason} ->
+            {:error, status, reason}
+
+          {:error, %Tesla.Env{status: status} = reason} ->
+            {:error, status, reason}
+        end
     end
   end
 end
