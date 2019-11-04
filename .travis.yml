@@ -1,5 +1,6 @@
 dist: trusty
 language: elixir
+elixir: "1.9"
 
 script:
   # This is basically `mix test` with coverage enabled.
@@ -15,8 +16,7 @@ after_success:
 jobs:
   include:
     # Run elixir tests
-    - elixir: "1.9"
-      otp_release: "20.3"
+    - otp_release: "20.3"
       services:
         - postgresql
         - rabbitmq
