@@ -36,3 +36,8 @@ config :turn_junebug_expressway, :junebug,
 
 config :turn_junebug_expressway,
   message_engine: TurnJunebugExpressway.MessageEngine
+
+config :sentry,
+  dsn: System.get_env("SENTRY_DSN"),
+  environment_name: Mix.env(),
+  included_environments: [:prod]

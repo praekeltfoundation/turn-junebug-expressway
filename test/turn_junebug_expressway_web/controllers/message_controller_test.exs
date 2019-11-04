@@ -36,7 +36,10 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
       assert conn.resp_body =~ "missing hmac signature"
     end
 
-    test "success when hmac header is valid", %{channel: channel} do
+    test "success when hmac header is valid",
+         %{
+           # channel: channel
+         } do
       {:ok, data} =
         Jason.encode(%{
           "preview_url" => false,
@@ -46,7 +49,7 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
           "type" => "text"
         })
 
-      queue_name = Utils.get_env(:rabbitmq, :messages_queue)
+      # queue_name = Utils.get_env(:rabbitmq, :messages_queue)
 
       # TODO: fix this test, this never gets executed.
       # it does work when running locally
