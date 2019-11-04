@@ -27,7 +27,7 @@ defmodule TurnJunebugExpressway.Mixfile do
   def application do
     [
       mod: {TurnJunebugExpressway.Application, []},
-      extra_applications: [:logger, :runtime_tools, :jason]
+      extra_applications: [:logger, :runtime_tools, :jason, :sentry]
     ]
   end
 
@@ -53,6 +53,7 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:tesla, "~> 1.2"},
       {:mock, "~> 0.3.2"},
       {:mox, "~> 0.5", only: :test},
+      {:sentry, "~> 7.0"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},
