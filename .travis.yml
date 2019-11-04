@@ -22,7 +22,9 @@ jobs:
         - rabbitmq
 
     # Deploy on merge to develop
-    - sudo: required
+    - language: python
+      python: "3.6"
+      sudo: required
       dist: trusty
       services: [docker]
       env:
