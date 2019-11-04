@@ -49,6 +49,10 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:plug_cowboy, "~> 2.1"},
       {:jason, "~> 1.1"},
       {:amqp, "~> 1.3"},
+      {:timex, "~> 3.5"},
+      {:tesla, "~> 1.2"},
+      {:mock, "~> 0.3.2"},
+      {:mox, "~> 0.5", only: :test},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},

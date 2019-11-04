@@ -17,4 +17,5 @@ erl_crash.dump
 
 .DS_Store
 *.log
+log/
 /.elixir_ls

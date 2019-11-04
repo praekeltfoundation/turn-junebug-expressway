@@ -13,6 +13,9 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   check_origin: false,
   watchers: []
 
+config :turn_junebug_expressway,
+  turn_client: TurnJunebugExpressway.TurnClient
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
@@ -47,5 +50,8 @@ config :turn_junebug_expressway, TurnJunebugExpressway.Repo,
 
 config :turn_junebug_expressway, :rabbitmq,
   exchange_name: "vumi",
-  messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",
-  urn: System.get_env("AMQP_URN") || "amqp://guest:guest@localhost1:5672/%2f"
+  messages_queue: System.get_env("MESSAGES_QUEUE", "dummy_messages_queue"),
+  urn: System.get_env("AMQP_URN", "amqp://guest:guest@localhost1:5672/%2f")
+
+config :turn_junebug_expressway, :turn,
+  url: System.get_env("TURN_URL", "https://testapp.turn.io/api/whatsapp/channel-id")
