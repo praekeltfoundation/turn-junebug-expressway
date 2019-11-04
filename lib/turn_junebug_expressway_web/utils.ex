@@ -84,7 +84,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
     status =
       %{
-        "ack" => "submitted",
+        "ack" => "sent",
         "nack" => "failed",
         "delivery_report" => "delivered"
       }
