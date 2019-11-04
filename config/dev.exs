@@ -13,6 +13,9 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   check_origin: false,
   watchers: []
 
+config :turn_junebug_expressway,
+  turn_client: TurnJunebugExpressway.TurnClient
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

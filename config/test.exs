@@ -6,6 +6,9 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   http: [port: 4001],
   server: false
 
+config :turn_junebug_expressway,
+  turn_client: TurnJunebugExpressway.Backends.ClientMock
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 

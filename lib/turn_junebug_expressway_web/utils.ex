@@ -1,24 +1,7 @@
 defmodule TurnJunebugExpresswayWeb.Utils do
   use Tesla
 
-  def turn_client() do
-    default_middleware = [
-      {Tesla.Middleware.BaseUrl, get_env(:turn, :url)},
-      Tesla.Middleware.JSON
-    ]
-
-    middleware =
-      case Mix.env() do
-        :prod ->
-          default_middleware
-          |> Enum.concat([{Tesla.Middleware.Timeout, [timeout: 2000]}])
-
-        _ ->
-          default_middleware
-      end
-
-    Tesla.client(middleware)
-  end
+  @client Application.get_env(:turn_junebug_expressway, :turn_client)
 
   def get_env(section, key) do
     Application.get_env(:turn_junebug_expressway, section)[key]
@@ -91,8 +74,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       }
       |> Map.get(Map.get(event, "event_type"))
 
-    case turn_client()
-         |> post("", %{
+    case @client.client()
+         |> @client.post("", %{
            "statuses" => [
              %{
                "id" => Map.get(event, "user_message_id"),

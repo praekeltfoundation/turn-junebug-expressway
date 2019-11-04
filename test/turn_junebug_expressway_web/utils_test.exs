@@ -1,24 +1,31 @@
 defmodule TurnJunebugExpresswayWeb.UtilsTest do
   use(ExUnit.Case)
 
-  import Tesla.Mock
+  import Mox
 
   alias TurnJunebugExpresswayWeb.Utils
 
   describe "forward_event" do
     test "sends event back to turn", %{} do
-      body =
-        %{
-          "statuses" => [
-            %{
-              "id" => "f74c4e6108d8418ab53dbcfd628242f3",
-              "recipient_id" => nil,
-              "status" => "sent",
-              "timestamp" => "1572525144"
-            }
-          ]
-        }
-        |> Jason.encode!()
+      body = %{
+        "statuses" => [
+          %{
+            "id" => "f74c4e6108d8418ab53dbcfd628242f3",
+            "recipient_id" => nil,
+            "status" => "sent",
+            "timestamp" => "1572525144"
+          }
+        ]
+      }
+
+      TurnJunebugExpressway.Backends.ClientMock
+      |> expect(:client, fn -> :client end)
+      |> expect(:post, fn :client, "", ^body ->
+        {:ok,
+         %Tesla.Env{
+           status: 200
+         }}
+      end)
 
       event = %{
         "transport_name" => "d49d3569-47d5-47a0-8074-5a7ffa684832",
@@ -33,17 +40,6 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3",
         "message_type" => "event"
       }
-
-      mock(fn %{
-                method: :post,
-                url: "https://testapp.turn.io/api/whatsapp/channel-id",
-                body: ^body,
-                headers: [{"content-type", "application/json"}]
-              } ->
-        %Tesla.Env{
-          status: 200
-        }
-      end)
 
       :ok = Utils.forward_event(Jason.encode!(event))
     end
