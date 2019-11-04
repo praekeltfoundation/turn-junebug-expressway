@@ -26,4 +26,4 @@ config :turn_junebug_expressway, :rabbitmq,
   urn: "amqp://guest:guest@localhost:5672/%2f"
 
 config :turn_junebug_expressway, :turn,
-  url: System.get_env("TURN_URL") || "https://testapp.turn.io/api/whatsapp/channel-id"
+  url: System.get_env("TURN_URL", "https://testapp.turn.io/api/whatsapp/channel-id")

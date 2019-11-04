@@ -65,8 +65,8 @@ import_config "prod.secret.exs"
 
 config :turn_junebug_expressway, :rabbitmq,
   exchange_name: "vumi",
-  messages_queue: System.get_env("MESSAGES_QUEUE") || "dummy_messages_queue",
-  urn: System.get_env("AMQP_URN") || "amqp://guest:guest@localhost1:5672/%2f"
+  messages_queue: System.get_env("MESSAGES_QUEUE", "dummy_messages_queue"),
+  urn: System.get_env("AMQP_URN", "amqp://guest:guest@localhost1:5672/%2f")
 
 config :turn_junebug_expressway, :turn,
-  url: System.get_env("TURN_URL") || "https://testapp.turn.io/api/whatsapp/channel-id"
+  url: System.get_env("TURN_URL", "https://testapp.turn.io/api/whatsapp/channel-id")

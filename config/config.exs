@@ -28,11 +28,11 @@ import_config "#{Mix.env()}.exs"
 config :phoenix, :json_library, Jason
 
 config :turn_junebug_expressway, :turn,
-  hmac_secret: System.get_env("TURN_HMAC_SECRET") || "REPLACE_ME"
+  hmac_secret: System.get_env("TURN_HMAC_SECRET", "REPLACE_ME")
 
 config :turn_junebug_expressway, :junebug,
-  from_addr: System.get_env("JUNEBUG_FROM_ADDR") || "+2712345",
-  transport_type: System.get_env("JUNEBUG_TRANSPORT_TYPE") || "telnet"
+  from_addr: System.get_env("JUNEBUG_FROM_ADDR", "+2712345"),
+  transport_type: System.get_env("JUNEBUG_TRANSPORT_TYPE", "telnet")
 
 config :turn_junebug_expressway,
   message_engine: TurnJunebugExpressway.MessageEngine
