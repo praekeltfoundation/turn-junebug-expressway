@@ -1,7 +1,6 @@
 defmodule TurnJunebugExpresswayWeb.UtilsTest do
   use(ExUnit.Case)
 
-  # import Ecto
   import Tesla.Mock
 
   alias TurnJunebugExpresswayWeb.Utils
@@ -14,7 +13,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
             %{
               "id" => "f74c4e6108d8418ab53dbcfd628242f3",
               "recipient_id" => nil,
-              "status" => "submitted",
+              "status" => "sent",
               "timestamp" => "1572525144"
             }
           ]

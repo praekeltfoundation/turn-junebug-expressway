@@ -3,6 +3,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
   def turn_client() do
     default_middleware = [
+      {Tesla.Middleware.BaseUrl, get_env(:turn, :url)},
       Tesla.Middleware.JSON
     ]
 
@@ -91,7 +92,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       |> Map.get(Map.get(event, "event_type"))
 
     case turn_client()
-         |> post(get_env(:turn, :url), %{
+         |> post("", %{
            "statuses" => [
              %{
                "id" => Map.get(event, "user_message_id"),
