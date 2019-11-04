@@ -38,7 +38,7 @@ jobs:
         - docker build --tag "$IMAGE_NAME" --cache-from "$IMAGE_NAME" .
       before_deploy:
         - pip install docker-ci-deploy===0.3.0
-        - echo "$REGISTRY_PASS" | docker login -u "$REGISTRY_USER" --password-stdin
+        - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
       deploy:
         provider: script
         script: dcd --version "$(git rev-parse --short HEAD)" --version-latest "$IMAGE_NAME"
@@ -46,7 +46,9 @@ jobs:
           branch: develop
 
     # Create docker images for tagged releases
-    - sudo: required
+    - language: python
+      python: "3.6"
+      sudo: required
       dist: trusty
       services: [docker]
       env:
@@ -61,7 +63,7 @@ jobs:
 
       before_deploy:
         - pip install docker-ci-deploy==0.3.0
-        - echo "$REGISTRY_PASS" | docker login -u "$REGISTRY_USER" --password-stdin
+        - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
       deploy:
         provider: script
         script: dcd --version "$(git tag -l --points-at HEAD)" --version-semver --version-latest "$IMAGE_NAME"
