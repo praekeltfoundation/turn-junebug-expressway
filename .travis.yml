@@ -56,15 +56,15 @@ jobs:
         - IMAGE_NAME=praekeltfoundation/turn-junebug-expressway
         - REGISTRY_USER=praekeltorgdeploy
         # REGISTRY_PASS
-        - secure: "B3IR0i4DCzAvX4FDSqf2mCBNHYK/kBDO8dnnKMs6ogOlpBYFW5RUsA8Z+xY/Lthns/TXC0W9/qslxowZrmm+7dnj6FhZH7CT2e7ZR9di1J4ZJpZAHY4dc3h8G3lNcwamurKJDxRXbGM3RpWR9s5hDVeKEzI2YHsrlJRlXeX17QEc8ohA1y2vyfYR0oic+NmR0lizjTtN4SM30Bw5r1fjVEpwPY59ylI6nQc+giFHoYrCxetiQ6BB22+ADyhvQhQ52qOJJTbTyMFsoac6EVCgPjSdXitMx6uFFvM80VxR7QsJ1q6mpJl8Ajf2cfN6W2mKyA5tzKAoLhjTwA731FmE0LEzbtMd2umvNuX2Ts2R+yOx2tA8dsZJNwSojTKDOfnXcmZQPhXuUBt0FUInXk4N9saJVLUinBWMv9psODS2MXP3+wpwugmiTAZmJSHnW3MYvYxbBxKjXZ0hjZgkpY5gIGg6dzMHV1MtGJQq2FEWAK+wzGQsPnDozhIGuqxdeRZKamKgWXQNNBuE99xT6ho7GUz5wW/2W8Nk7zGcvBgo/jyqNleB3tBucOBSdQmfZxLpAj0EugIRwv4Miwsj5Ya/khN/QXglDtSoSf6Z/FgQ9ETjSUbx7QXmT/0JA7A6sSVJTuNFM9DcwQDs5nYEYnioq6ugieLE/DCnLwmm09KVNxA="
+        - secure: "ru/vVZSvn6+RdcDxGWRxa5n0OoSXTXxH3odOOHLh4wU0HjXNYNypVJAK+rHDG9GcLLUOW+/Ze8lDehLbQ2HufNSJUUohQUqAGjZaMq6wvFynKrcLME0Xq3xawLdrNx9uZbx/UOPynmdmblS25BA6oojG0wQl0k27NGtQ0RtvnaSJWpJayBQRWt/wwPh/40ucfWvuBfBH+Ib5e9Ag37dUpw70kQgzoQL4ieCvdd4YwMQ/muY7spb0qrG9wjLBNPVLTSOrluUegnDBCb9DbKs+BqM5YORoGs8YmvzKYB7vJ2BtKv9hp9IOe5y67uGpXOMc6vMaM7iXz0S5Wpl3HxPgFeA9fRq2mYOgtw1Nfaje5A3tiJ8di8WOhRN2TP4/UpSufprcwCJLcJtZLLOlGe/x0LOyUscAMm4wEEIRJnnWpAktR2LzFyzuby8KW4glF9Ta9x3KLkvZd3RBtti4G9HGlbBjOuRXRw8b21Ka4Z/lIOtqWWtoI335u2oA5yow7x/2N6otb3T+fnrYpjg+lSE2iJUBT2e9Mt6k8PZK6DEML8TZCkI4HkMPzTTorrwsCWZT+u/l1MvGrpgorYlSLhfojWAbKNlRgOuxtMT1J2jVcz37T/m/BlYJnqS+6fUjuyNtLJxh/yNMPye9ptlU4sxhoaaZW3WDCUx2EbMyzwtNjiY="
       install:
         - docker pull "$IMAGE_NAME" || true
+        - pip install -U pip
       script:
         - docker build --tag "$IMAGE_NAME" --cache-from "$IMAGE_NAME" .
-
       before_deploy:
         - pip install docker-ci-deploy==0.3.0
-        - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+        - echo -n $REGISTRY_PASS | docker login -u "$REGISTRY_USER" --password-stdin
       deploy:
         provider: script
         script: dcd --version "$(git tag -l --points-at HEAD)" --version-semver --version-latest "$IMAGE_NAME"
