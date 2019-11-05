@@ -31,9 +31,10 @@ jobs:
         - IMAGE_NAME=praekeltfoundation/turn-junebug-expressway:develop
         - REGISTRY_USER=praekeltorgdeploy
         # REGISTRY_PASS
-        - secure: "B3IR0i4DCzAvX4FDSqf2mCBNHYK/kBDO8dnnKMs6ogOlpBYFW5RUsA8Z+xY/Lthns/TXC0W9/qslxowZrmm+7dnj6FhZH7CT2e7ZR9di1J4ZJpZAHY4dc3h8G3lNcwamurKJDxRXbGM3RpWR9s5hDVeKEzI2YHsrlJRlXeX17QEc8ohA1y2vyfYR0oic+NmR0lizjTtN4SM30Bw5r1fjVEpwPY59ylI6nQc+giFHoYrCxetiQ6BB22+ADyhvQhQ52qOJJTbTyMFsoac6EVCgPjSdXitMx6uFFvM80VxR7QsJ1q6mpJl8Ajf2cfN6W2mKyA5tzKAoLhjTwA731FmE0LEzbtMd2umvNuX2Ts2R+yOx2tA8dsZJNwSojTKDOfnXcmZQPhXuUBt0FUInXk4N9saJVLUinBWMv9psODS2MXP3+wpwugmiTAZmJSHnW3MYvYxbBxKjXZ0hjZgkpY5gIGg6dzMHV1MtGJQq2FEWAK+wzGQsPnDozhIGuqxdeRZKamKgWXQNNBuE99xT6ho7GUz5wW/2W8Nk7zGcvBgo/jyqNleB3tBucOBSdQmfZxLpAj0EugIRwv4Miwsj5Ya/khN/QXglDtSoSf6Z/FgQ9ETjSUbx7QXmT/0JA7A6sSVJTuNFM9DcwQDs5nYEYnioq6ugieLE/DCnLwmm09KVNxA="
+        - secure: "LtQheNqVgKNjEkKmJ7nkEunCeZnsaQFTooLsu8fWc7C05pbTl9DifkBUM/A8Mx1CX9VJC2b1DKq1u8rOX909gFRP0iAp32UBhAvFPi49gtLsfiC4arReOYJph+LHfk2YljvMjgdP6WAZCuylGblxgZ0KhCD5tAWCc6196I7AZCq/UCrZq8hFVXy45s4rQl3ZzbJRQWocnJ42rKnmoA+bTsb0fq6z/XX2AsJuU1oC/Kqdj4VVjOsro1+1Oi4akliYnxmYVPTC7DSpiqHyh0buttwKUZx73DpgRKwFRAJjF15kaIV5nMb6WEW38bqu8IRbR2iXxsh1uWmE8weglzWKsyq9eGPkNTLoikVbvKsjpz6gMr1Qm+VgWu8NPyDOss6elSFlRnIIAqbQubKOUvPol29jfas2WA/1KIHVNEm1bau6lSNTrnuncjHviUb5SDfEksVsQjayMb46Gp1U3duS7yzm8eXtEL0HF32ijPcQ3vZe0RLqRRHK7L3rSH7zcey/Zq00arYyG0NUMcq/vQqJUCFgdWVeJvtJfC5vKyF947k4+jNiJaxGYV6LdpZmiC4OUeR0xL9wClIJZIT3fK6hCW+wAKdZWlXiRZzL53pqQfeZOR8y7h0eiracp/IBsGOsBRQOmjghGtU5NVRl7rRPE17k74Oo1/CZy6U6ubulW/g="
       before_script:
         - docker pull "$IMAGE_NAME" || true
+        - pip install -U pip
       script:
         - docker build --tag "$IMAGE_NAME" --cache-from "$IMAGE_NAME" .
       before_deploy:
