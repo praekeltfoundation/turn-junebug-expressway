@@ -1,0 +1,51 @@
+version: "2"
+services:
+  expressway:
+    build: .
+    expose:
+      - 80
+    environment:
+      - TURN_URL=https://localhost:4040/api/whatsapp/3d2abe0f-2153-4b72-830c-bb1561da0fe5
+      - AMQP_URN=amqp://guest:guest@rabbitmq:5672/%2f
+      - HOST=localhost
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+  redis:
+    image: redis
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 15672:15672
+    expose:
+      - 5672
+  junebug:
+    image: praekeltfoundation/junebug:latest
+    ports:
+      - 8080:80
+      - 9001:9001
+    expose:
+      - 8080
+      - 9001
+    volumes:
+      - example-app:/app
+    links:
+      - redis
+      - rabbitmq
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_DB=1
+      - REDIS_PORT=6379
+      - AMQP_HOST=rabbitmq
+      - AMQP_USER=guest
+      - AMQP_PASSWORD=guest
+      - AMQP_VHOST=/
+      - AMQP_PORT=5672
+volumes:
+  example-app:
