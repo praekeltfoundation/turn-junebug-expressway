@@ -100,9 +100,8 @@ defmodule TurnJunebugExpressway.MessageEngine do
           Basic.reject(channel, tag, requeue: not redelivered)
       end
   rescue
-    exception ->
+    _exception ->
       :ok = Basic.reject(channel, tag, requeue: not redelivered)
       IO.puts("Error with #{payload}")
-      IO.inspect(exception)
   end
 end
