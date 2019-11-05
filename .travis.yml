@@ -31,7 +31,7 @@ jobs:
         - IMAGE_NAME=praekeltfoundation/turn-junebug-expressway:develop
         - REGISTRY_USER=praekeltorgdeploy
         # REGISTRY_PASS
-        - secure: "LtQheNqVgKNjEkKmJ7nkEunCeZnsaQFTooLsu8fWc7C05pbTl9DifkBUM/A8Mx1CX9VJC2b1DKq1u8rOX909gFRP0iAp32UBhAvFPi49gtLsfiC4arReOYJph+LHfk2YljvMjgdP6WAZCuylGblxgZ0KhCD5tAWCc6196I7AZCq/UCrZq8hFVXy45s4rQl3ZzbJRQWocnJ42rKnmoA+bTsb0fq6z/XX2AsJuU1oC/Kqdj4VVjOsro1+1Oi4akliYnxmYVPTC7DSpiqHyh0buttwKUZx73DpgRKwFRAJjF15kaIV5nMb6WEW38bqu8IRbR2iXxsh1uWmE8weglzWKsyq9eGPkNTLoikVbvKsjpz6gMr1Qm+VgWu8NPyDOss6elSFlRnIIAqbQubKOUvPol29jfas2WA/1KIHVNEm1bau6lSNTrnuncjHviUb5SDfEksVsQjayMb46Gp1U3duS7yzm8eXtEL0HF32ijPcQ3vZe0RLqRRHK7L3rSH7zcey/Zq00arYyG0NUMcq/vQqJUCFgdWVeJvtJfC5vKyF947k4+jNiJaxGYV6LdpZmiC4OUeR0xL9wClIJZIT3fK6hCW+wAKdZWlXiRZzL53pqQfeZOR8y7h0eiracp/IBsGOsBRQOmjghGtU5NVRl7rRPE17k74Oo1/CZy6U6ubulW/g="
+        - secure: "ru/vVZSvn6+RdcDxGWRxa5n0OoSXTXxH3odOOHLh4wU0HjXNYNypVJAK+rHDG9GcLLUOW+/Ze8lDehLbQ2HufNSJUUohQUqAGjZaMq6wvFynKrcLME0Xq3xawLdrNx9uZbx/UOPynmdmblS25BA6oojG0wQl0k27NGtQ0RtvnaSJWpJayBQRWt/wwPh/40ucfWvuBfBH+Ib5e9Ag37dUpw70kQgzoQL4ieCvdd4YwMQ/muY7spb0qrG9wjLBNPVLTSOrluUegnDBCb9DbKs+BqM5YORoGs8YmvzKYB7vJ2BtKv9hp9IOe5y67uGpXOMc6vMaM7iXz0S5Wpl3HxPgFeA9fRq2mYOgtw1Nfaje5A3tiJ8di8WOhRN2TP4/UpSufprcwCJLcJtZLLOlGe/x0LOyUscAMm4wEEIRJnnWpAktR2LzFyzuby8KW4glF9Ta9x3KLkvZd3RBtti4G9HGlbBjOuRXRw8b21Ka4Z/lIOtqWWtoI335u2oA5yow7x/2N6otb3T+fnrYpjg+lSE2iJUBT2e9Mt6k8PZK6DEML8TZCkI4HkMPzTTorrwsCWZT+u/l1MvGrpgorYlSLhfojWAbKNlRgOuxtMT1J2jVcz37T/m/BlYJnqS+6fUjuyNtLJxh/yNMPye9ptlU4sxhoaaZW3WDCUx2EbMyzwtNjiY="
       before_script:
         - docker pull "$IMAGE_NAME" || true
         - pip install -U pip
