@@ -9,7 +9,7 @@ defmodule TurnJunebugExpressway.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(TurnJunebugExpressway.Repo, []),
+      # supervisor(TurnJunebugExpressway.Repo, []),
       # Start the endpoint when the application starts
       supervisor(TurnJunebugExpresswayWeb.Endpoint, []),
       # Start your own worker by calling: TurnJunebugExpressway.Worker.start_link(arg1, arg2, arg3)

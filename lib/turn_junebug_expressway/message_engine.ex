@@ -7,9 +7,6 @@ defmodule TurnJunebugExpressway.MessageEngine do
 
   alias TurnJunebugExpresswayWeb.Utils
 
-  @host Utils.get_env(:rabbitmq, :urn)
-  @exchange_name Utils.get_env(:rabbitmq, :exchange_name)
-  @queue_name Utils.get_env(:rabbitmq, :messages_queue)
   @reconnect_interval 10_000
 
   def start_link(opts \\ [name: __MODULE__]) do
@@ -34,10 +31,12 @@ defmodule TurnJunebugExpressway.MessageEngine do
   end
 
   def handle_call({:publish_message, message}, _from, channel) do
+    queue_name = Utils.get_env(:rabbitmq, :messages_queue)
+
     AMQP.Basic.publish(
       channel,
-      @exchange_name,
-      "#{@queue_name}.outbound",
+      Utils.get_env(:rabbitmq, :exchange_name),
+      "#{queue_name}.outbound",
       Jason.encode!(message)
     )
 
@@ -45,20 +44,23 @@ defmodule TurnJunebugExpressway.MessageEngine do
   end
 
   def handle_info(:connect, _channel) do
-    case Connection.open(@host) do
+    host = Utils.get_env(:rabbitmq, :urn)
+
+    case Connection.open(host) do
       {:ok, conn} ->
         # Get notifications when the connection goes down
         Process.monitor(conn.pid)
 
         {:ok, channel} = AMQP.Channel.open(conn)
 
-        AMQP.Queue.declare(channel, "#{@queue_name}.events")
-        {:ok, _consumer_tag} = Basic.consume(channel, "#{@queue_name}.events")
+        queue_name = Utils.get_env(:rabbitmq, :messages_queue)
+        AMQP.Queue.declare(channel, "#{queue_name}.events")
+        {:ok, _consumer_tag} = Basic.consume(channel, "#{queue_name}.events")
 
         {:noreply, channel}
 
       {:error, _} ->
-        Logger.error("Failed to connect #{@host}. Reconnecting later...")
+        Logger.error("Failed to connect #{host}. Reconnecting later...")
         # Retry later
         Process.send_after(self(), :connect, @reconnect_interval)
         {:noreply, nil}

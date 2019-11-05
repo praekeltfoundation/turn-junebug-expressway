@@ -15,8 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: System.get_env("HOST"), port: 80]
 
 config :turn_junebug_expressway,
   turn_client: TurnJunebugExpressway.TurnClient
@@ -69,7 +68,7 @@ import_config "prod.secret.exs"
 config :turn_junebug_expressway, :rabbitmq,
   exchange_name: "vumi",
   messages_queue: System.get_env("MESSAGES_QUEUE", "dummy_messages_queue"),
-  urn: System.get_env("AMQP_URN", "amqp://guest:guest@localhost1:5672/%2f")
+  urn: System.get_env("AMQP_URN", "amqp://guest:guest@localhost:5672/%2f")
 
 config :turn_junebug_expressway, :turn,
   url: System.get_env("TURN_URL", "https://testapp.turn.io/api/whatsapp/channel-id")
