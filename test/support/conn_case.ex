@@ -29,11 +29,11 @@ defmodule TurnJunebugExpresswayWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
+    # :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
 
-    unless tags[:async] do
-      Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
-    end
+    # unless tags[:async] do
+    #   Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
+    # end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end

@@ -8,6 +8,7 @@ defmodule TurnJunebugExpressway.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
+      # TODO: remove all DB connection code
       # Start the Ecto repository
       # supervisor(TurnJunebugExpressway.Repo, []),
       # Start the endpoint when the application starts

@@ -18,7 +18,7 @@ defmodule TurnJunebugExpressway.DataCase do
 
   using do
     quote do
-      alias TurnJunebugExpressway.Repo
+      # alias TurnJunebugExpressway.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -28,11 +28,11 @@ defmodule TurnJunebugExpressway.DataCase do
   end
 
   setup tags do
-    :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
+    # :ok = Sandbox.checkout(TurnJunebugExpressway.Repo)
 
-    unless tags[:async] do
-      Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
-    end
+    # unless tags[:async] do
+    #   Sandbox.mode(TurnJunebugExpressway.Repo, {:shared, self()})
+    # end
 
     :ok
   end
