@@ -26,7 +26,11 @@ config :turn_junebug_expressway, TurnJunebugExpressway.Repo,
 config :turn_junebug_expressway, :rabbitmq,
   exchange_name: "test_exchange",
   messages_queue: "test_messages_queue",
-  urn: "amqp://guest:guest@localhost:5672/%2f"
+  username: System.get_env("AMQP_USER", "guest"),
+  password: System.get_env("AMQP_PASSWORD", "guest"),
+  host: System.get_env("AMQP_HOST", "localhost"),
+  port: String.to_integer(System.get_env("AMQP_PORT", "5672")),
+  vhost: System.get_env("AMQP_VHOST", "/")
 
 config :turn_junebug_expressway, :turn,
   url: System.get_env("TURN_URL", "https://testapp.turn.io/api/whatsapp/channel-id")

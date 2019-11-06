@@ -11,6 +11,6 @@ RUN mix deps.compile
 
 RUN mix compile
 
-ENV PORT=4000
-EXPOSE 4000
+ENV PORT=80
+EXPOSE 80
 CMD [ "mix", "phx.server" ]

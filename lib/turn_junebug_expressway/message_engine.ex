@@ -44,9 +44,19 @@ defmodule TurnJunebugExpressway.MessageEngine do
   end
 
   def handle_info(:connect, _channel) do
-    host = Utils.get_env(:rabbitmq, :urn)
+    username = Utils.get_env(:rabbitmq, :username)
+    password = Utils.get_env(:rabbitmq, :password)
+    host = Utils.get_env(:rabbitmq, :host)
+    port = Utils.get_env(:rabbitmq, :port)
+    vhost = Utils.get_env(:rabbitmq, :vhost)
 
-    case Connection.open(host) do
+    case Connection.open(
+           host: host,
+           username: username,
+           password: password,
+           port: port,
+           virtual_host: vhost
+         ) do
       {:ok, conn} ->
         # Get notifications when the connection goes down
         Process.monitor(conn.pid)
@@ -59,8 +69,9 @@ defmodule TurnJunebugExpressway.MessageEngine do
 
         {:noreply, channel}
 
-      {:error, _} ->
+      {:error, error} ->
         Logger.error("Failed to connect #{host}. Reconnecting later...")
+        Logger.error("Error: #{error}")
         # Retry later
         Process.send_after(self(), :connect, @reconnect_interval)
         {:noreply, nil}
