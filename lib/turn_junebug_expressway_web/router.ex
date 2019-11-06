@@ -12,4 +12,8 @@ defmodule TurnJunebugExpresswayWeb.Router do
 
     resources("/send_message", MessageController, only: [:create])
   end
+
+  scope "/", TurnJunebugExpresswayWeb do
+    resources("/health", DefaultController, only: [:index])
+  end
 end
