@@ -64,8 +64,8 @@ defmodule TurnJunebugExpressway.MessageEngine do
         {:ok, channel} = AMQP.Channel.open(conn)
 
         queue_name = Utils.get_env(:rabbitmq, :messages_queue)
-        AMQP.Queue.declare(channel, "#{queue_name}.events")
-        {:ok, _consumer_tag} = Basic.consume(channel, "#{queue_name}.events")
+        AMQP.Queue.declare(channel, "#{queue_name}.event")
+        {:ok, _consumer_tag} = Basic.consume(channel, "#{queue_name}.event")
 
         {:noreply, channel}
 
