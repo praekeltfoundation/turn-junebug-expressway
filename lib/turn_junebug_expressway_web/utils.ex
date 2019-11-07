@@ -13,6 +13,13 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       |> Enum.into(%{})
       |> Map.get("http_x_engage_hook_signature")
 
+    all_headers =
+      conn.req_headers
+      |> Enum.into(%{})
+
+    # credo:disable-for-next-line
+    inspect(all_headers)
+
     our_hmac =
       :crypto.hmac(
         :sha256,
