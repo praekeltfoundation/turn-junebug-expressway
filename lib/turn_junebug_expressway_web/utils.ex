@@ -11,7 +11,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     header_hmac =
       conn.req_headers
       |> Enum.into(%{})
-      |> Map.get("http_x_engage_hook_signature")
+      |> Map.get("x-turn-hook-signature")
 
     all_headers =
       conn.req_headers

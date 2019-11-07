@@ -19,7 +19,7 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
     test "error when hmac header is invalid", %{} do
       conn =
         build_conn()
-        |> put_req_header("http_x_engage_hook_signature", "bla bla bla")
+        |> put_req_header("x-turn-hook-signature", "bla bla bla")
         |> post("/api/v1/send_message", test: "test")
 
       assert conn.status == 403
@@ -86,7 +86,7 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
       conn =
         build_conn()
         |> put_req_header(
-          "http_x_engage_hook_signature",
+          "x-turn-hook-signature",
           "jW/nhuaGDB2IMv2nBlzEngmBGiHX4cZeTsSHuiESTmc="
         )
         |> put_req_header("content-type", "application/json")
