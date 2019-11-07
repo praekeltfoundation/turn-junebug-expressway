@@ -64,8 +64,25 @@ defmodule TurnJunebugExpressway.MessageEngine do
         {:ok, channel} = AMQP.Channel.open(conn)
 
         queue_name = Utils.get_env(:rabbitmq, :messages_queue)
-        AMQP.Queue.declare(channel, "#{queue_name}.event")
-        {:ok, _consumer_tag} = Basic.consume(channel, "#{queue_name}.event")
+        exchange_name = Utils.get_env(:rabbitmq, :exchange_name)
+
+        # Declare a exchange for testing
+        case Mix.env() do
+          :test ->
+            AMQP.Exchange.declare(channel, exchange_name)
+
+          _ ->
+            nil
+        end
+
+        Queue.declare(channel, "#{queue_name}.event", durable: true)
+
+        Queue.bind(channel, "#{queue_name}.event", exchange_name,
+          routing_key: "#{queue_name}.event"
+        )
+
+        {:ok, _consumer_tag} =
+          AMQP.Basic.consume(channel, "#{queue_name}.event", nil, no_ack: true)
 
         {:noreply, channel}
 
