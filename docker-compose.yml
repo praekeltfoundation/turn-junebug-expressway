@@ -2,6 +2,8 @@ version: "2"
 services:
   expressway:
     build: .
+    ports:
+      - 80:80
     expose:
       - 80
     environment:

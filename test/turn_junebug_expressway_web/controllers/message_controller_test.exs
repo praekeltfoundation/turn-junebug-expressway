@@ -10,7 +10,6 @@ defmodule TurnJunebugExpresswayWeb.MessageControllerTest do
     channel = TurnJunebugExpressway.MessageEngine.get_channel()
 
     AMQP.Queue.declare(channel, "#{queue_name}.outbound")
-    AMQP.Exchange.declare(channel, exchange_name)
     AMQP.Queue.bind(channel, "#{queue_name}.outbound", exchange_name)
 
     {:ok, conn: conn, channel: channel}
