@@ -81,8 +81,7 @@ defmodule TurnJunebugExpressway.MessageEngine do
           routing_key: "#{queue_name}.event"
         )
 
-        {:ok, _consumer_tag} =
-          AMQP.Basic.consume(channel, "#{queue_name}.event", nil, no_ack: true)
+        {:ok, _consumer_tag} = AMQP.Basic.consume(channel, "#{queue_name}.event", nil)
 
         {:noreply, channel}
 
