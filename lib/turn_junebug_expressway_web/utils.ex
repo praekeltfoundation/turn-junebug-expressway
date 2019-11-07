@@ -18,7 +18,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       |> Enum.into(%{})
 
     # credo:disable-for-next-line
-    inspect(all_headers)
+    IO.inspect(all_headers)
 
     our_hmac =
       :crypto.hmac(
