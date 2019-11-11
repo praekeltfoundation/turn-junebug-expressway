@@ -62,4 +62,14 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
       :ok = Utils.forward_event(Jason.encode!(event))
     end
   end
+
+  describe "format_to_addr" do
+    test "should add +", %{} do
+      assert Utils.format_to_addr("123") == "+123"
+    end
+
+    test "should NOT add +", %{} do
+      assert Utils.format_to_addr("+123") == "+123"
+    end
+  end
 end
