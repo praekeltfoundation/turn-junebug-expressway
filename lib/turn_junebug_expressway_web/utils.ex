@@ -45,7 +45,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     to =
       body
       |> Map.get("to")
-      |> format_to_addr
+
+    # |> format_to_addr
 
     today = DateTime.utc_now()
 
