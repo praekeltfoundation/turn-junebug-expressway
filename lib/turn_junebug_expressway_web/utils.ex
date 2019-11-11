@@ -28,25 +28,12 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     end
   end
 
-  def format_to_addr(to) do
-    case String.starts_with?(to, "+") do
-      true -> to
-      false -> "+" <> to
-    end
-  end
-
   def format_message(conn) do
     {:ok, body} = Jason.decode(conn.private[:raw_body])
 
     IO.puts(">>> format message")
     # credo:disable-for-next-line
     IO.inspect(body)
-
-    to =
-      body
-      |> Map.get("to")
-
-    # |> format_to_addr
 
     today = DateTime.utc_now()
 
@@ -55,7 +42,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
        "content" => get_in(body, ["text", "body"]),
        "message_version" => "20110921",
        "message_type" => "user_message",
-       "to_addr" => to,
+       "to_addr" => Map.get(body, "to"),
        "from_addr" => get_env(:junebug, :from_addr),
        "message_id" => Ecto.UUID.generate(),
        "timestamp" => DateTime.to_string(today),
