@@ -17,8 +17,6 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
   describe "handle_incoming_event" do
     test "sends event back to turn", %{} do
-      path = Utils.get_env(:turn, :event_path)
-
       body = %{
         "statuses" => [
           %{
@@ -32,7 +30,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
-      |> expect(:post, fn :client, ^path, ^body -> :ok end)
+      |> expect(:post_event, fn :client, ^body -> :ok end)
 
       event = %{
         "transport_name" => "d49d3569-47d5-47a0-8074-5a7ffa684832",
@@ -70,8 +68,6 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     end
 
     test "send incoming message to turn", %{} do
-      path = Utils.get_env(:turn, :inbound_path)
-
       body = %{
         "details" => %{
           "content" => "Hello my name is ...",
@@ -86,7 +82,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
-      |> expect(:post, fn :client, ^path, ^body -> :ok end)
+      |> expect(:post_inbound, fn :client, ^body -> :ok end)
 
       event = %{
         "message_type" => "user_message",

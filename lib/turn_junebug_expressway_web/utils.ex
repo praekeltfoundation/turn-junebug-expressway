@@ -112,7 +112,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
       {:ok, status} ->
         @client.client()
-        |> @client.post(get_env(:turn, :event_path), %{
+        |> @client.post_event(%{
           "statuses" => [
             %{
               "id" => Map.get(event, "user_message_id"),
@@ -136,7 +136,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     urn = format_urn(Map.get(inbound, "from_addr"))
 
     @client.client()
-    |> @client.post(get_env(:turn, :inbound_path), %{
+    |> @client.post_inbound(%{
       "event_type" => "external_message",
       "urn" => urn,
       "timestamp" => get_event_timestamp(inbound),
