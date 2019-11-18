@@ -95,35 +95,48 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     end
   end
 
-  def forward_event(payload) do
-    {:ok, event} = Jason.decode(payload)
+  def handle_incoming_event(payload) do
+    data = Jason.decode!(payload)
 
+    case Map.get(data, "message_type") do
+      "event" -> forward_event(data)
+      "user_message" -> forward_inbound(data)
+      nil -> :ok
+    end
+  end
+
+  def forward_event(event) do
     case event |> get_event_status do
       {:ignore, _} ->
         :ok
 
       {:ok, status} ->
-        case @client.client()
-             |> @client.post("", %{
-               "statuses" => [
-                 %{
-                   "id" => Map.get(event, "user_message_id"),
-                   "recipient_id" => nil,
-                   "status" => status,
-                   "timestamp" => get_event_timestamp(event)
-                 }
-               ]
-             }) do
-          {:ok, %Tesla.Env{status: status}}
-          when status in 200..299 ->
-            :ok
-
-          {:ok, %Tesla.Env{status: status} = reason} ->
-            {:error, status, reason}
-
-          {:error, %Tesla.Env{status: status} = reason} ->
-            {:error, status, reason}
-        end
+        @client.client()
+        |> @client.post(get_env(:turn, :event_path), %{
+          "statuses" => [
+            %{
+              "id" => Map.get(event, "user_message_id"),
+              "recipient_id" => nil,
+              "status" => status,
+              "timestamp" => get_event_timestamp(event)
+            }
+          ]
+        })
     end
+  end
+
+  def forward_inbound(inbound) do
+    @client.client()
+    |> @client.post(get_env(:turn, :inbound_path), %{
+      "event_type" => "external_message",
+      "urn" => "+" <> Map.get(inbound, "from_addr"),
+      "timestamp" => get_event_timestamp(inbound),
+      "event_id" => Map.get(inbound, "message_id"),
+      "details" => %{
+        "content" => Map.get(inbound, "content"),
+        "direction" => "inbound",
+        "from_addr" => "+" <> Map.get(inbound, "from_addr")
+      }
+    })
   end
 end

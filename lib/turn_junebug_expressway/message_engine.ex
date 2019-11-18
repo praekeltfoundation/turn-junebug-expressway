@@ -75,6 +75,7 @@ defmodule TurnJunebugExpressway.MessageEngine do
             nil
         end
 
+        # Consume events queue
         Queue.declare(channel, "#{queue_name}.event", durable: true)
 
         Queue.bind(channel, "#{queue_name}.event", exchange_name,
@@ -82,6 +83,15 @@ defmodule TurnJunebugExpressway.MessageEngine do
         )
 
         {:ok, _consumer_tag} = AMQP.Basic.consume(channel, "#{queue_name}.event", nil)
+
+        # Consume inbound queue
+        Queue.declare(channel, "#{queue_name}.inbound", durable: true)
+
+        Queue.bind(channel, "#{queue_name}.inbound", exchange_name,
+          routing_key: "#{queue_name}.inbound"
+        )
+
+        {:ok, _consumer_tag} = AMQP.Basic.consume(channel, "#{queue_name}.inbound", nil)
 
         {:noreply, channel}
 
@@ -118,7 +128,7 @@ defmodule TurnJunebugExpressway.MessageEngine do
 
   defp consume(channel, tag, redelivered, payload) do
     :ok =
-      case Utils.forward_event(payload) do
+      case Utils.handle_incoming_event(payload) do
         :ok ->
           Basic.ack(channel, tag)
 
@@ -127,8 +137,10 @@ defmodule TurnJunebugExpressway.MessageEngine do
           Basic.reject(channel, tag, requeue: not redelivered)
       end
   rescue
-    _exception ->
+    exception ->
       :ok = Basic.reject(channel, tag, requeue: not redelivered)
-      IO.puts("Error with #{payload}")
+      IO.puts("Error with event #{payload}")
+      # credo:disable-for-next-line
+      IO.inspect(exception)
   end
 end

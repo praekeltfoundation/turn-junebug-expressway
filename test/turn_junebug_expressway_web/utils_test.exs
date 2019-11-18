@@ -5,8 +5,10 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
   alias TurnJunebugExpresswayWeb.Utils
 
-  describe "forward_event" do
+  describe "handle_incoming_event" do
     test "sends event back to turn", %{} do
+      path = Utils.get_env(:turn, :event_path)
+
       body = %{
         "statuses" => [
           %{
@@ -20,12 +22,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
-      |> expect(:post, fn :client, "", ^body ->
-        {:ok,
-         %Tesla.Env{
-           status: 200
-         }}
-      end)
+      |> expect(:post, fn :client, ^path, ^body -> :ok end)
 
       event = %{
         "transport_name" => "d49d3569-47d5-47a0-8074-5a7ffa684832",
@@ -41,7 +38,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "message_type" => "event"
       }
 
-      :ok = Utils.forward_event(Jason.encode!(event))
+      :ok = Utils.handle_incoming_event(Jason.encode!(event))
     end
 
     test "ignore pending delivery_report", %{} do
@@ -59,7 +56,37 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "message_type" => "event"
       }
 
-      :ok = Utils.forward_event(Jason.encode!(event))
+      :ok = Utils.handle_incoming_event(Jason.encode!(event))
+    end
+
+    test "send incoming message to turn", %{} do
+      path = Utils.get_env(:turn, :inbound_path)
+
+      body = %{
+        "details" => %{
+          "content" => "Hello my name is ...",
+          "direction" => "inbound",
+          "from_addr" => "+271234"
+        },
+        "event_id" => "f74c4e6108d8418ab53dbcfd628242f3",
+        "event_type" => "external_message",
+        "timestamp" => "1572525144",
+        "urn" => "+271234"
+      }
+
+      TurnJunebugExpressway.Backends.ClientMock
+      |> expect(:client, fn -> :client end)
+      |> expect(:post, fn :client, ^path, ^body -> :ok end)
+
+      event = %{
+        "message_type" => "user_message",
+        "from_addr" => "271234",
+        "timestamp" => "2019-10-31 12:32:24.930687",
+        "message_id" => "f74c4e6108d8418ab53dbcfd628242f3",
+        "content" => "Hello my name is ..."
+      }
+
+      :ok = Utils.handle_incoming_event(Jason.encode!(event))
     end
   end
 end
