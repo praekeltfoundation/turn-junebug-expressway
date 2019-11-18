@@ -23,6 +23,21 @@ defmodule TurnJunebugExpressway.TurnClient do
     Tesla.client(middleware)
   end
 
+  def post_event(client, body) do
+    client
+    |> post(Utils.get_env(:turn, :event_path), body)
+  end
+
+  def post_inbound(client, body) do
+    client
+    |> post(Utils.get_env(:turn, :inbound_path), body,
+      headers: [
+        {"authorization", "Bearer " <> Utils.get_env(:turn, :token)},
+        {"accept", "application/vnd.v1+json"}
+      ]
+    )
+  end
+
   def post(client, path, body) do
     case client
          |> post(path, body) do
