@@ -75,4 +75,6 @@ config :turn_junebug_expressway, :rabbitmq,
   vhost: System.get_env("AMQP_VHOST", "/")
 
 config :turn_junebug_expressway, :turn,
-  url: System.get_env("TURN_URL", "https://testapp.turn.io/api/whatsapp/channel-id")
+  base_url: System.get_env("TURN_URL", "https://testapp.turn.io"),
+  event_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
+  inbound_path: System.get_env("TURN_INBOUND", "v1/events")
