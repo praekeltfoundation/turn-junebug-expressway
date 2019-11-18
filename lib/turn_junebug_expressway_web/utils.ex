@@ -125,17 +125,26 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     end
   end
 
+  def format_urn(urn) do
+    case urn do
+      "+" <> urn -> "+" <> urn
+      urn -> "+" <> urn
+    end
+  end
+
   def forward_inbound(inbound) do
+    urn = format_urn(Map.get(inbound, "from_addr"))
+
     @client.client()
     |> @client.post(get_env(:turn, :inbound_path), %{
       "event_type" => "external_message",
-      "urn" => "+" <> Map.get(inbound, "from_addr"),
+      "urn" => urn,
       "timestamp" => get_event_timestamp(inbound),
       "event_id" => Map.get(inbound, "message_id"),
       "details" => %{
         "content" => Map.get(inbound, "content"),
         "direction" => "inbound",
-        "from_addr" => "+" <> Map.get(inbound, "from_addr")
+        "from_addr" => urn
       }
     })
   end

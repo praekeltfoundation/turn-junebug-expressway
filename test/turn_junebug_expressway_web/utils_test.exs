@@ -5,6 +5,16 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
   alias TurnJunebugExpresswayWeb.Utils
 
+  describe "format_urn" do
+    test "format_urn/1 with +" do
+      assert Utils.format_urn("+123") == "+123"
+    end
+
+    test "format_urn/1 without +" do
+      assert Utils.format_urn("123") == "+123"
+    end
+  end
+
   describe "handle_incoming_event" do
     test "sends event back to turn", %{} do
       path = Utils.get_env(:turn, :event_path)
