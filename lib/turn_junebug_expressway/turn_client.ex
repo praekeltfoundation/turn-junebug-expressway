@@ -25,22 +25,20 @@ defmodule TurnJunebugExpressway.TurnClient do
 
   def post_event(client, body) do
     client
-    |> post(Utils.get_env(:turn, :event_path), body)
+    |> do_post(Utils.get_env(:turn, :event_path), body)
   end
 
   def post_inbound(client, body) do
     client
-    |> post(Utils.get_env(:turn, :inbound_path), body,
-      headers: [
-        {"authorization", "Bearer " <> Utils.get_env(:turn, :token)},
-        {"accept", "application/vnd.v1+json"}
-      ]
-    )
+    |> do_post(Utils.get_env(:turn, :inbound_path), body, [
+      {"authorization", "Bearer " <> Utils.get_env(:turn, :token)},
+      {"accept", "application/vnd.v1+json"}
+    ])
   end
 
-  def post(client, path, body) do
+  def do_post(client, path, body, headers \\ []) do
     case client
-         |> post(path, body) do
+         |> post(path, body, headers: headers) do
       {:ok, %Tesla.Env{status: status}}
       when status in 200..299 ->
         :ok
