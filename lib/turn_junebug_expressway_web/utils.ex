@@ -135,8 +135,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def forward_inbound(inbound) do
     urn = format_urn(Map.get(inbound, "from_addr"))
 
-    @client.client()
-    |> @client.post_inbound(%{
+    message = %{
       "event_type" => "external_message",
       "urn" => urn,
       "timestamp" => get_event_timestamp(inbound),
@@ -146,6 +145,13 @@ defmodule TurnJunebugExpresswayWeb.Utils do
         "direction" => "inbound",
         "from_addr" => urn
       }
-    })
+    }
+
+    IO.puts(">>> forward_inbound")
+    # credo:disable-for-next-line
+    IO.inspect(message)
+
+    @client.client()
+    |> @client.post_inbound(message)
   end
 end
