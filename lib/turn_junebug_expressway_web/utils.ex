@@ -63,7 +63,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     |> Map.get("timestamp")
     |> Timex.parse!("%Y-%m-%d %H:%M:%S.%f", :strftime)
     |> DateTime.from_naive!("Etc/UTC")
-    |> DateTime.to_unix()
+    |> DateTime.to_unix(:millisecond)
     |> to_string()
   end
 
