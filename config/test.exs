@@ -34,6 +34,6 @@ config :turn_junebug_expressway, :rabbitmq,
 
 config :turn_junebug_expressway, :turn,
   base_url: System.get_env("TURN_URL", "https://testapp.turn.io"),
-  outbound_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
+  event_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
   inbound_path: System.get_env("TURN_INBOUND", "v1/events"),
   token: System.get_env("TURN_TOKEN", "replaceme")
