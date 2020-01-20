@@ -38,7 +38,11 @@ defmodule TurnJunebugExpressway.TurnClient do
 
   def do_post(client, path, body, headers \\ []) do
     case client
-         |> post(path, body, headers: headers) do
+         |> post(path, body,
+           headers: [
+             {"x-turn-fallback-channel", "1"} | headers
+           ]
+         ) do
       {:ok, %Tesla.Env{status: status}}
       when status in 200..299 ->
         :ok
