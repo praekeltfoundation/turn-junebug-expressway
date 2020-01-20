@@ -1,0 +1,8 @@
+{
+  "type": "telnet_addr",
+  "config": {
+    "twisted_endpoint": "tcp:9001"
+  },
+  "label": "Test Telnet AMQP channel",
+  "amqp_queue": "dummy_messages_queue"
+}

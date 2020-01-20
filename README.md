@@ -1,10 +1,8 @@
 # Turn Junebug Expressway
 A turn fallback channel specifically for Junebug.
 
-To start your Phoenix server:
+To run the tests locally:
 
   * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+  * Run `docker-compose -f docker-compose-dev.yml up` to start required services.
+  * Run tests with `mix test`
