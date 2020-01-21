@@ -18,7 +18,8 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   url: [host: System.get_env("HOST"), port: 80]
 
 config :turn_junebug_expressway,
-  turn_client: TurnJunebugExpressway.TurnClient
+  turn_client: TurnJunebugExpressway.TurnClient,
+  rapidpro_client: TurnJunebugExpressway.RapidproClient
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -79,3 +80,6 @@ config :turn_junebug_expressway, :turn,
   event_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
   inbound_path: System.get_env("TURN_INBOUND", "v1/events"),
   token: System.get_env("TURN_TOKEN", "replaceme")
+
+config :turn_junebug_expressway, :rapidpro,
+  base_url: System.get_env("RAPIDPRO_URL", "https://test-rp.com/c/wa/channel-id/receive")

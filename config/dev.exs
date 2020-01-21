@@ -14,7 +14,8 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   watchers: []
 
 config :turn_junebug_expressway,
-  turn_client: TurnJunebugExpressway.TurnClient
+  turn_client: TurnJunebugExpressway.TurnClient,
+  rapidpro_client: TurnJunebugExpressway.RapidproClient
 
 # ## SSL Support
 #
@@ -62,3 +63,6 @@ config :turn_junebug_expressway, :turn,
   outbound_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
   inbound_path: System.get_env("TURN_INBOUND", "v1/events"),
   token: System.get_env("TURN_TOKEN", "replaceme")
+
+config :turn_junebug_expressway, :rapidpro,
+  base_url: System.get_env("RAPIDPRO_URL", "https://test-rp.com/c/wa/channel-id/receive")

@@ -68,7 +68,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     end
 
     test "send incoming message to turn", %{} do
-      body = %{
+      turn_body = %{
         "details" => %{
           "content" => "Hello my name is ...",
           "direction" => "inbound",
@@ -80,9 +80,23 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "urn" => "+271234"
       }
 
+      rp_body = %{
+        "messages" => [
+          %{
+            "id" => "f74c4e6108d8418ab53dbcfd628242f3",
+            "from" => "+271234",
+            "text" => %{"body" => "Hello my name is ..."},
+            "timestamp" => "1572525144930",
+            "to" => "+271234",
+            "type" => "text"
+          }
+        ]
+      }
+
       TurnJunebugExpressway.Backends.ClientMock
-      |> expect(:client, fn -> :client end)
-      |> expect(:post_inbound, fn :client, ^body -> :ok end)
+      |> expect(:client, 2, fn -> :client end)
+      |> expect(:post_inbound, fn :client, ^turn_body -> :ok end)
+      |> expect(:post_inbound, fn :client, ^rp_body -> :ok end)
 
       event = %{
         "message_type" => "user_message",

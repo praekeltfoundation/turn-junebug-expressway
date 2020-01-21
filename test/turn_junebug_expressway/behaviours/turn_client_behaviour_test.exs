@@ -1,4 +1,4 @@
-defmodule TurnJunebugExpressway.Behaviours.ClientBehaviourTest do
+defmodule TurnJunebugExpressway.Behaviours.TurnClientBehaviourTest do
   use TurnJunebugExpressway.DataCase
 
   alias TurnJunebugExpressway.TurnClient
@@ -32,11 +32,12 @@ defmodule TurnJunebugExpressway.Behaviours.ClientBehaviourTest do
               } ->
         assert Jason.decode!(body) == %{"some" => "inbound"}
 
-        headers == [
-          {"authorization", "Bearer " <> Utils.get_env(:turn, :token)},
-          {"accept", "application/vnd.v1+json"},
-          {"x-turn-fallback-channel", "1"}
-        ]
+        assert headers == [
+                 {"x-turn-fallback-channel", "1"},
+                 {"authorization", "Bearer " <> Utils.get_env(:turn, :token)},
+                 {"accept", "application/vnd.v1+json"},
+                 {"content-type", "application/json"}
+               ]
 
         json(%{})
       end)

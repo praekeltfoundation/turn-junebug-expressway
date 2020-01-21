@@ -1,7 +1,8 @@
 defmodule TurnJunebugExpresswayWeb.Utils do
   use Tesla
 
-  @client Application.get_env(:turn_junebug_expressway, :turn_client)
+  @turn_client Application.get_env(:turn_junebug_expressway, :turn_client)
+  @rapidpro_client Application.get_env(:turn_junebug_expressway, :rapidpro_client)
 
   def get_env(section, key) do
     Application.get_env(:turn_junebug_expressway, section)[key]
@@ -111,8 +112,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
         :ok
 
       {:ok, status} ->
-        @client.client()
-        |> @client.post_event(%{
+        @turn_client.client()
+        |> @turn_client.post_event(%{
           "statuses" => [
             %{
               "id" => Map.get(event, "user_message_id"),
@@ -134,11 +135,12 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
   def forward_inbound(inbound) do
     urn = format_urn(Map.get(inbound, "from_addr"))
+    timestamp = get_event_timestamp(inbound)
 
     message = %{
       "event_type" => "external_message",
       "urn" => urn,
-      "timestamp" => get_event_timestamp(inbound),
+      "timestamp" => timestamp,
       "event_id" => Map.get(inbound, "message_id"),
       "details" => %{
         "content" => Map.get(inbound, "content"),
@@ -147,11 +149,40 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       }
     }
 
-    IO.puts(">>> forward_inbound")
+    IO.puts(">>> forward_inbound turn")
     # credo:disable-for-next-line
     IO.inspect(message)
 
-    @client.client()
-    |> @client.post_inbound(message)
+    case @turn_client.client()
+         |> @turn_client.post_inbound(message) do
+      :ok ->
+        rp_message = %{
+          "messages" => [
+            %{
+              "id" => Map.get(inbound, "message_id"),
+              "from" => urn,
+              "text" => %{"body" => Map.get(inbound, "content")},
+              "timestamp" => timestamp,
+              "to" => urn,
+              "type" => "text"
+            }
+          ]
+        }
+
+        IO.puts(">>> forward_inbound rapidpro")
+        # credo:disable-for-next-line
+        IO.inspect(rp_message)
+
+        @rapidpro_client.client()
+        |> @rapidpro_client.post_inbound(rp_message)
+
+      error ->
+        error
+    end
+  end
+
+  def version() do
+    {:ok, vsn} = :application.get_key(:my_app, :vsn)
+    List.to_string(vsn)
   end
 end
