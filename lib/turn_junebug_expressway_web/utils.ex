@@ -180,9 +180,4 @@ defmodule TurnJunebugExpresswayWeb.Utils do
         error
     end
   end
-
-  def version() do
-    {:ok, vsn} = :application.get_key(:my_app, :vsn)
-    List.to_string(vsn)
-  end
 end
