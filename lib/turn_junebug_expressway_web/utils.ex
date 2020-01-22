@@ -59,12 +59,12 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
 
-  def get_event_timestamp(event) do
+  def get_event_timestamp(event, level \\ :millisecond) do
     event
     |> Map.get("timestamp")
     |> Timex.parse!("%Y-%m-%d %H:%M:%S.%f", :strftime)
     |> DateTime.from_naive!("Etc/UTC")
-    |> DateTime.to_unix(:millisecond)
+    |> DateTime.to_unix(level)
     |> to_string()
   end
 
@@ -119,7 +119,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
               "id" => Map.get(event, "user_message_id"),
               "recipient_id" => nil,
               "status" => status,
-              "timestamp" => get_event_timestamp(event)
+              "timestamp" => get_event_timestamp(event, :second)
             }
           ]
         })
