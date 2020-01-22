@@ -23,7 +23,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
             "recipient_id" => nil,
             "status" => "sent",
-            "timestamp" => "1572525144930"
+            "timestamp" => "1572525144"
           }
         ]
       }
