@@ -64,7 +64,6 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
       |> expect(:post_event, fn :client, new_body ->
-        IO.inspect(new_body)
         :ok
       end)
 
