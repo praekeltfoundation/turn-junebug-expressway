@@ -1,11 +1,10 @@
-defmodule TurnJunebugExpressway.TurnClient do
+defmodule TurnJunebugExpressway.RapidproClient do
   use TurnJunebugExpressway.Behaviours.ClientBehaviour
 
   alias TurnJunebugExpresswayWeb.Utils
 
   def client() do
     default_middleware = [
-      {Tesla.Middleware.BaseUrl, Utils.get_env(:turn, :base_url)},
       Tesla.Middleware.JSON
     ]
 
@@ -22,26 +21,19 @@ defmodule TurnJunebugExpressway.TurnClient do
     Tesla.client(middleware)
   end
 
-  def post_event(client, body) do
-    client
-    |> do_post(Utils.get_env(:turn, :event_path), body)
+  def post_event(_client, _body) do
+    :ok
   end
 
+  @spec post_inbound(Tesla.Client.t(), any) :: :ok | {:error, any, Tesla.Env.t()}
   def post_inbound(client, body) do
     client
-    |> do_post(Utils.get_env(:turn, :inbound_path), body, [
-      {"authorization", "Bearer " <> Utils.get_env(:turn, :token)},
-      {"accept", "application/vnd.v1+json"}
-    ])
+    |> do_post(Utils.get_env(:rapidpro, :base_url), body)
   end
 
   def do_post(client, path, body, headers \\ []) do
     case client
-         |> post(path, body,
-           headers: [
-             {"x-turn-fallback-channel", "1"} | headers
-           ]
-         ) do
+         |> post(path, body, headers) do
       {:ok, %Tesla.Env{status: status}}
       when status in 200..299 ->
         :ok

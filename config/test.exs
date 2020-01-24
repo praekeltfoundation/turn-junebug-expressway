@@ -7,7 +7,8 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   server: false
 
 config :turn_junebug_expressway,
-  turn_client: TurnJunebugExpressway.Backends.ClientMock
+  turn_client: TurnJunebugExpressway.Backends.ClientMock,
+  rapidpro_client: TurnJunebugExpressway.Backends.ClientMock
 
 # Print only warnings and errors during test
 config :logger, level: :warn
@@ -37,3 +38,6 @@ config :turn_junebug_expressway, :turn,
   event_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
   inbound_path: System.get_env("TURN_INBOUND", "v1/events"),
   token: System.get_env("TURN_TOKEN", "replaceme")
+
+config :turn_junebug_expressway, :rapidpro,
+  base_url: "https://test-rp.com/c/wa/channel-id/receive"
