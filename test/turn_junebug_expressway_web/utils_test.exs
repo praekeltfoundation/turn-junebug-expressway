@@ -6,12 +6,20 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
   alias TurnJunebugExpresswayWeb.Utils
 
   describe "format_urn" do
-    test "format_urn/1 with +" do
-      assert Utils.format_urn("+123") == "+123"
+    test "format_urn/1 with + for turn" do
+      assert Utils.format_urn("+123", :turn) == "+123"
     end
 
-    test "format_urn/1 without +" do
-      assert Utils.format_urn("123") == "+123"
+    test "format_urn/1 without + for turn" do
+      assert Utils.format_urn("123", :turn) == "+123"
+    end
+
+    test "format_urn/1 with + for rapdipro" do
+      assert Utils.format_urn("+123", :rapidpro) == "123"
+    end
+
+    test "format_urn/1 without + for rapidpro" do
+      assert Utils.format_urn("123", :rapidpro) == "123"
     end
   end
 
@@ -119,10 +127,10 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "messages" => [
           %{
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
-            "from" => "+271234",
+            "from" => "271234",
             "text" => %{"body" => "Hello my name is ..."},
             "timestamp" => "1572525144930",
-            "to" => "+271234",
+            "to" => "271234",
             "type" => "text"
           }
         ]

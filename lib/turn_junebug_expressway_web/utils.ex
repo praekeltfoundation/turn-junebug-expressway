@@ -126,26 +126,31 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     end
   end
 
-  def format_urn(urn) do
+  def format_urn(urn, :turn) do
     case urn do
       "+" <> urn -> "+" <> urn
       urn -> "+" <> urn
     end
   end
 
+  def format_urn(urn, :rapidpro) do
+    String.replace_prefix(urn, "+", "")
+  end
+
   def forward_inbound(inbound) do
-    urn = format_urn(Map.get(inbound, "from_addr"))
+    turn_urn = format_urn(Map.get(inbound, "from_addr"), :turn)
+    rapidpro_urn = format_urn(Map.get(inbound, "from_addr"), :rapidpro)
     timestamp = get_event_timestamp(inbound)
 
     message = %{
       "event_type" => "external_message",
-      "urn" => urn,
+      "urn" => turn_urn,
       "timestamp" => timestamp,
       "event_id" => Map.get(inbound, "message_id"),
       "details" => %{
         "content" => Map.get(inbound, "content"),
         "direction" => "inbound",
-        "from_addr" => urn
+        "from_addr" => turn_urn
       }
     }
 
@@ -160,10 +165,10 @@ defmodule TurnJunebugExpresswayWeb.Utils do
           "messages" => [
             %{
               "id" => Map.get(inbound, "message_id"),
-              "from" => urn,
+              "from" => rapidpro_urn,
               "text" => %{"body" => Map.get(inbound, "content")},
               "timestamp" => timestamp,
-              "to" => urn,
+              "to" => rapidpro_urn,
               "type" => "text"
             }
           ]
