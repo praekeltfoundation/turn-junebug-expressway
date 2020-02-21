@@ -28,7 +28,7 @@ defmodule TurnJunebugExpressway.RapidproClient do
   @spec post_inbound(Tesla.Client.t(), any) :: :ok | {:error, any, Tesla.Env.t()}
   def post_inbound(client, body) do
     client
-    |> do_post(Utils.get_env(:rapidpro, :base_url), body)
+    |> do_post(Utils.get_env(:rapidpro, :channel_url), body)
   end
 
   def do_post(client, path, body, headers \\ []) do

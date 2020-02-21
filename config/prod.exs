@@ -65,21 +65,3 @@ config :logger, level: :info
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"
-
-config :turn_junebug_expressway, :rabbitmq,
-  exchange_name: "vumi",
-  messages_queue: System.get_env("MESSAGES_QUEUE", "dummy_messages_queue"),
-  username: System.get_env("AMQP_USER", "guest"),
-  password: System.get_env("AMQP_PASSWORD", "guest"),
-  host: System.get_env("AMQP_HOST", "localhost"),
-  port: String.to_integer(System.get_env("AMQP_PORT", "5672")),
-  vhost: System.get_env("AMQP_VHOST", "/")
-
-config :turn_junebug_expressway, :turn,
-  base_url: System.get_env("TURN_URL", "https://testapp.turn.io"),
-  event_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
-  inbound_path: System.get_env("TURN_INBOUND", "v1/events"),
-  token: System.get_env("TURN_TOKEN", "replaceme")
-
-config :turn_junebug_expressway, :rapidpro,
-  base_url: System.get_env("RAPIDPRO_URL", "https://test-rp.com/c/wa/channel-id/receive")
