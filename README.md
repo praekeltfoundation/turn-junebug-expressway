@@ -1,7 +1,17 @@
 # Turn Junebug Expressway
-A turn fallback channel specifically for Junebug.
+*A turn fallback channel specifically for Junebug.*
 
-To run the tests locally:
+The expressway app will accept messages from turn on the `/api/v1/send_message` endpoint and forward it to Junebug by placing it on the message queue configured. This needs to be configured on the turn settings page.
+
+Any events received from Junebug on the messages queue will be forwarded to Turn on the event path configured.
+
+Any inbounds received from Junebug on the messages queue will be forwarded to Turn on the inbound path configured and to Rapidpro on the configured channel.
+
+Turn sends a HMAC signature with each request, expressway will use the HMAC secret configured to validate the origin of each request. The HMAC secret can be found in the turn settings.
+
+Related Turn docs: https://whatsapp.praekelt.org/docs/index.html#turn-fallback-channel
+
+#### To run the tests locally:
 
   * Install dependencies with `mix deps.get`
   * Run `docker-compose -f docker-compose-dev.yml up` to start required services.
