@@ -7,7 +7,7 @@ services:
     expose:
       - 80
     environment:
-      - TURN_URL=https://localhost:4040/api/whatsapp/3d2abe0f-2153-4b72-830c-bb1561da0fe5
+      - TURN_BASE_URL=https://localhost:4040/api/whatsapp/3d2abe0f-2153-4b72-830c-bb1561da0fe5
       - AMQP_HOST=rabbitmq
       - HOST=localhost
     links:

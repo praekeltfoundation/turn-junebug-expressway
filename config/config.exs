@@ -20,9 +20,9 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :turn_junebug_expressway, :turn,
-  base_url: System.get_env("TURN_URL", "https://testapp.turn.io"),
-  event_path: System.get_env("TURN_OUTBOUND", "api/whatsapp/channel-id"),
-  inbound_path: System.get_env("TURN_INBOUND", "v1/events"),
+  base_url: System.get_env("TURN_BASE_URL", "https://testapp.turn.io"),
+  event_path: System.get_env("TURN_EVENT_PATH", "api/whatsapp/channel-id"),
+  inbound_path: System.get_env("TURN_INBOUND_PATH", "v1/events"),
   token: System.get_env("TURN_TOKEN", "replaceme"),
   hmac_secret: System.get_env("TURN_HMAC_SECRET", "REPLACE_ME")
 
@@ -43,7 +43,7 @@ config :turn_junebug_expressway,
   message_engine: TurnJunebugExpressway.MessageEngine
 
 config :turn_junebug_expressway, :rapidpro,
-  base_url: System.get_env("RAPIDPRO_URL", "https://test-rp.com/c/wa/channel-id/receive")
+  channel_url: System.get_env("RAPIDPRO_CHANNEL_URL", "https://test-rp.com/c/wa/channel-id/receive")
 
 config :sentry,
   dsn: System.get_env("SENTRY_DSN"),
