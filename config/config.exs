@@ -43,7 +43,8 @@ config :turn_junebug_expressway,
   message_engine: TurnJunebugExpressway.MessageEngine
 
 config :turn_junebug_expressway, :rapidpro,
-  channel_url: System.get_env("RAPIDPRO_CHANNEL_URL", "https://test-rp.com/c/wa/channel-id/receive")
+  channel_url:
+    System.get_env("RAPIDPRO_CHANNEL_URL", "https://test-rp.com/c/wa/channel-id/receive")
 
 config :sentry,
   dsn: System.get_env("SENTRY_DSN"),
