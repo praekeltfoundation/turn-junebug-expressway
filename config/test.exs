@@ -15,15 +15,6 @@ config :logger, level: :warn
 
 config :tesla, adapter: Tesla.Mock
 
-# Configure your database
-config :turn_junebug_expressway, TurnJunebugExpressway.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "turn_junebug_expressway_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
-
 config :turn_junebug_expressway, :rabbitmq,
   exchange_name: "test_exchange",
   messages_queue: "test_messages_queue",

@@ -5,10 +5,6 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :turn_junebug_expressway,
-  ecto_repos: [TurnJunebugExpressway.Repo]
-
 # Configures the endpoint
 config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   url: [host: "localhost"],

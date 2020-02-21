@@ -10,9 +10,3 @@ use Mix.Config
 # or recreate for your teammates (or yourself later on).
 config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY")
-
-# Configure your database
-config :turn_junebug_expressway, TurnJunebugExpressway.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  url: System.get_env("DATABASE_URL"),
-  pool_size: 15
