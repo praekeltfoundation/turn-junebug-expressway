@@ -129,7 +129,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
             "from" => "271234",
             "text" => %{"body" => "Hello my name is ..."},
-            "timestamp" => "1572525144930",
+            "timestamp" => "1572525144",
             "to" => "271234",
             "type" => "text"
           }
