@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.5
+------------
+Fix formatting
+
 0.0.4
 ------------
 Fix rapidpro timestamp precision
