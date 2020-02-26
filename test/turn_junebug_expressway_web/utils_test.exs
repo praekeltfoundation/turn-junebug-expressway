@@ -23,6 +23,16 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     end
   end
 
+  describe "send_message" do
+    test "send_message does nothing with nil content", %{} do
+      assert Utils.send_message(%{content: nil}) == :ok
+    end
+
+    test "send_message does something with content", %{} do
+      assert Utils.send_message(%{content: "something"}) != :ok
+    end
+  end
+
   describe "handle_incoming_event" do
     test "sends event back to turn", %{} do
       body = %{

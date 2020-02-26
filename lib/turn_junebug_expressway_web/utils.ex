@@ -55,6 +55,11 @@ defmodule TurnJunebugExpresswayWeb.Utils do
      }}
   end
 
+  def send_message(%{content: content} = _message) when content == nil do
+    # Do nothing
+    :ok
+  end
+
   def send_message(message) do
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
