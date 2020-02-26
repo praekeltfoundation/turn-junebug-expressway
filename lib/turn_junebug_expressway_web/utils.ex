@@ -162,6 +162,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
          |> @turn_client.post_inbound(message) do
       :ok ->
         timestamp = get_event_timestamp(inbound, :second)
+
         rp_message = %{
           "messages" => [
             %{
