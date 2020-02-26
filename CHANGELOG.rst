@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.6
+------------
+Ignore template messages for now
+
 0.0.5
 ------------
 Fix formatting
