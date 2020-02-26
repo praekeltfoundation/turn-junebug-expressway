@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.4
+------------
+Fix rapidpro timestamp precision
+
 0.0.3
 ------------
 Cleanup some code and refine env vars
