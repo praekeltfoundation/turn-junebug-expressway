@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.7
+-----------
+Fix Ignore template messages for now
+
 0.0.6
 ------------
 Ignore template messages for now
