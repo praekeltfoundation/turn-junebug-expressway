@@ -25,11 +25,11 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
   describe "send_message" do
     test "send_message does nothing with nil content", %{} do
-      assert Utils.send_message(%{content: nil}) == :ok
+      assert Utils.send_message(%{"content" => nil}) == :ok
     end
 
     test "send_message does something with content", %{} do
-      assert Utils.send_message(%{content: "something"}) != :ok
+      assert Utils.send_message(%{"content" => "something"}) != :ok
     end
   end
 

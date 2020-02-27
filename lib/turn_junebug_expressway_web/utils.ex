@@ -55,7 +55,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
      }}
   end
 
-  def send_message(%{content: content} = _message) when content == nil do
+  def send_message(%{"content" => content} = _message) when content == nil do
     # Do nothing
     :ok
   end
