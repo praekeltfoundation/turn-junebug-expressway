@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.9
+-----------
+Remove debug logs
+
 0.0.8
 -----------
 Set amqp prefetch limit
