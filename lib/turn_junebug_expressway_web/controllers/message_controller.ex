@@ -10,9 +10,9 @@ defmodule TurnJunebugExpresswayWeb.MessageController do
         # TODO: error handling
         {:ok, message} = Utils.format_message(conn)
 
-        IO.puts(">>> create message")
-        # credo:disable-for-next-line
-        IO.inspect(message)
+        # IO.puts(">>> create message")
+        # # credo:disable-for-next-line
+        # IO.inspect(message)
 
         Utils.send_message(message)
 

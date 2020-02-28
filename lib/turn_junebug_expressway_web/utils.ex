@@ -32,9 +32,9 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def format_message(conn) do
     {:ok, body} = Jason.decode(conn.private[:raw_body])
 
-    IO.puts(">>> format message")
-    # credo:disable-for-next-line
-    IO.inspect(body)
+    # IO.puts(">>> format message")
+    # # credo:disable-for-next-line
+    # IO.inspect(body)
 
     today = DateTime.utc_now()
 
@@ -159,9 +159,9 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       }
     }
 
-    IO.puts(">>> forward_inbound turn")
-    # credo:disable-for-next-line
-    IO.inspect(message)
+    # IO.puts(">>> forward_inbound turn")
+    # # credo:disable-for-next-line
+    # IO.inspect(message)
 
     case @turn_client.client()
          |> @turn_client.post_inbound(message) do
@@ -181,9 +181,9 @@ defmodule TurnJunebugExpresswayWeb.Utils do
           ]
         }
 
-        IO.puts(">>> forward_inbound rapidpro")
-        # credo:disable-for-next-line
-        IO.inspect(rp_message)
+        # IO.puts(">>> forward_inbound rapidpro")
+        # # credo:disable-for-next-line
+        # IO.inspect(rp_message)
 
         @rapidpro_client.client()
         |> @rapidpro_client.post_inbound(rp_message)
