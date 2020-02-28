@@ -82,6 +82,8 @@ defmodule TurnJunebugExpressway.MessageEngine do
           routing_key: "#{queue_name}.event"
         )
 
+        :ok = Basic.qos(channel, prefetch_count: 10)
+
         {:ok, _consumer_tag} = AMQP.Basic.consume(channel, "#{queue_name}.event", nil)
 
         # Consume inbound queue
