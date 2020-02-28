@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.8
+-----------
+Set amqp prefetch limit
+
 0.0.7
 -----------
 Fix Ignore template messages for now
