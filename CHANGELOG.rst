@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.11
+-----------
+Separate messages from Junebug and from Turn into two separate genservers
+
 0.0.10
 -----------
 Reduce prefetch to 1 temporarily
