@@ -12,7 +12,8 @@ defmodule TurnJunebugExpressway.Application do
       supervisor(TurnJunebugExpresswayWeb.Endpoint, []),
       # Start your own worker by calling: TurnJunebugExpressway.Worker.start_link(arg1, arg2, arg3)
       # worker(TurnJunebugExpressway.Worker, [arg1, arg2, arg3]),
-      worker(TurnJunebugExpressway.MessageEngine, [])
+      worker(TurnJunebugExpressway.MessageEngine, []),
+      worker(TurnJunebugExpressway.HttpPushEngine, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
