@@ -3,6 +3,9 @@ defmodule TurnJunebugExpresswayWeb.Endpoint do
 
   socket("/socket", TurnJunebugExpresswayWeb.UserSocket)
 
+  plug TurnJunebugExpresswayWeb.MetricsPlugExporter
+  plug TurnJunebugExpresswayWeb.PipelineInstrumenter
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest

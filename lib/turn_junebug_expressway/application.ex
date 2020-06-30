@@ -6,6 +6,11 @@ defmodule TurnJunebugExpressway.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    # Metrics
+    TurnJunebugExpresswayWeb.PhoenixInstrumenter.setup()
+    TurnJunebugExpresswayWeb.PipelineInstrumenter.setup()
+    TurnJunebugExpresswayWeb.MetricsPlugExporter.setup()
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
