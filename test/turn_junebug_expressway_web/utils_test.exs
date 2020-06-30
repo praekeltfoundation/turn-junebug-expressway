@@ -68,7 +68,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     end
 
     test "sends event back to turn error from QA", %{} do
-      body = %{
+      _body = %{
         "statuses" => [
           %{
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
@@ -81,7 +81,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
-      |> expect(:post_event, fn :client, new_body ->
+      |> expect(:post_event, fn :client, _new_body ->
         :ok
       end)
 

@@ -15,7 +15,7 @@ defmodule TurnJunebugExpressway.Behaviours.TurnClientBehaviourTest do
                 headers: headers
               } ->
         assert Jason.decode!(body) == %{"some" => "event"}
-        headers == [{"x-turn-fallback-channel", "1"}]
+        assert headers == [{"x-turn-fallback-channel", "1"}, {"content-type", "application/json"}]
         json(%{})
       end)
 
