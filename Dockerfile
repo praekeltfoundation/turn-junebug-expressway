@@ -21,6 +21,8 @@ COPY --from=elixir lib lib
 COPY --from=elixir priv priv
 COPY --from=elixir mix.* ./
 
+RUN apk add --no-cache libstdc++
+
 ENV PORT=80
 EXPOSE 80
 CMD [ "mix", "phx.server" ]
