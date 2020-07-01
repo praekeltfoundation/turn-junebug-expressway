@@ -10,7 +10,8 @@ config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "AAo1lJXpZ8mHIIlvwbvmUrcS0vxTmioPPgOsfHCIjawp5jwlesHxp/XI9B33pp5Z",
   render_errors: [view: TurnJunebugExpresswayWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: TurnJunebugExpressway.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: TurnJunebugExpressway.PubSub, adapter: Phoenix.PubSub.PG2],
+  instrumenters: [TurnJunebugExpresswayWeb.PhoenixInstrumenter]
 
 # Configures Elixir's Logger
 config :logger, :console,

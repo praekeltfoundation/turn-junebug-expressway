@@ -2,7 +2,6 @@ defmodule TurnJunebugExpressway.Behaviours.RapidproClientBehaviourTest do
   use TurnJunebugExpressway.DataCase
 
   alias TurnJunebugExpressway.RapidproClient
-  alias TurnJunebugExpresswayWeb.Utils
 
   import Tesla.Mock
 
