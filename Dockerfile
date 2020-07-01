@@ -12,6 +12,8 @@ RUN mix compile
 
 FROM elixir:1.9-alpine
 ENV MIX_ENV="prod"
+RUN mix local.hex --force
+RUN mix local.rebar --force
 COPY --from=elixir _build _build
 COPY --from=elixir config config
 COPY --from=elixir deps deps
