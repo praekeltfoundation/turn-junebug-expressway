@@ -7,6 +7,11 @@ use Mix.Config
 
 # Configures the endpoint
 config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
+  http: [
+    protocol_options: [
+      idle_timeout: Integer.parse(System.get_env("EXPRESSWAY_ENDPOINT_TIMEOUT", "1500"))
+    ]
+  ],
   url: [host: "localhost"],
   secret_key_base: "AAo1lJXpZ8mHIIlvwbvmUrcS0vxTmioPPgOsfHCIjawp5jwlesHxp/XI9B33pp5Z",
   render_errors: [view: TurnJunebugExpresswayWeb.ErrorView, accepts: ~w(json)],
