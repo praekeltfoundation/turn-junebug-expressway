@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.13
+-----------
+Fixed sentry logging for incoming events/messages
+
 0.0.12
 -----------
 Added prometheus exporters
