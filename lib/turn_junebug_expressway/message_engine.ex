@@ -120,6 +120,10 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
         {:error, status, reason} ->
           IO.puts("Error sending event: #{status} -> #{reason}")
           Basic.reject(channel, tag, requeue: not redelivered)
+
+          if redelivered do
+            raise "Error sending event: #{status} -> #{reason}"
+          end
       end
   rescue
     exception ->
@@ -127,6 +131,10 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
       IO.puts("Error with event #{payload}")
       # credo:disable-for-next-line
       IO.inspect(exception)
+
+      if redelivered do
+        reraise exception, __STACKTRACE__
+      end
   end
 end
 
