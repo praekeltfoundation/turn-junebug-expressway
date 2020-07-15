@@ -47,6 +47,7 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
         {:ok, channel} = AMQP.Channel.open(conn)
 
         queue_name = Utils.get_env(:rabbitmq, :messages_queue)
+        queue_concurrency = Utils.get_env(:rabbitmq, :queue_concurrency)
         exchange_name = Utils.get_env(:rabbitmq, :exchange_name)
 
         # Declare a exchange for testing
@@ -65,7 +66,7 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
           routing_key: "#{queue_name}.event"
         )
 
-        :ok = Basic.qos(channel, prefetch_count: 1)
+        :ok = Basic.qos(channel, prefetch_count: queue_concurrency)
 
         {:ok, _consumer_tag} = AMQP.Basic.consume(channel, "#{queue_name}.event", nil)
 
@@ -112,8 +113,14 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
   end
 
   defp consume(channel, tag, redelivered, payload) do
-    :ok =
-      case Utils.handle_incoming_event(payload) do
+    spawn(fn ->
+      case Task.Supervisor.async(
+             Task.ExpressSupervisor,
+             fn ->
+               TurnJunebugExpressway.ConsumeMessageTask.process_msg(payload)
+             end
+           )
+           |> Task.await() do
         :ok ->
           Basic.ack(channel, tag)
 
@@ -125,16 +132,21 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
             raise "Error sending event: #{status} -> #{reason}"
           end
       end
-  rescue
-    exception ->
-      :ok = Basic.reject(channel, tag, requeue: not redelivered)
-      IO.puts("Error with event #{payload}")
-      # credo:disable-for-next-line
-      IO.inspect(exception)
+    end)
+  end
+end
 
-      if redelivered do
-        reraise exception, __STACKTRACE__
-      end
+defmodule TurnJunebugExpressway.ConsumeMessageTask do
+  use Task
+
+  alias TurnJunebugExpresswayWeb.Utils
+
+  def start_link() do
+    Task.start_link(ConsumeMessageTask, :run, [])
+  end
+
+  def process_msg(payload) do
+    Utils.handle_incoming_event(payload)
   end
 end
 

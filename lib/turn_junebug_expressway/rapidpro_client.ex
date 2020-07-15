@@ -43,6 +43,9 @@ defmodule TurnJunebugExpressway.RapidproClient do
 
       {:error, %Tesla.Env{status: status} = reason} ->
         {:error, status, reason}
+
+      {:error, reason} when is_atom(reason) ->
+        {:error, 503, reason}
     end
   end
 end

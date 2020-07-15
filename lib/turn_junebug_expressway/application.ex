@@ -18,7 +18,8 @@ defmodule TurnJunebugExpressway.Application do
       # Start your own worker by calling: TurnJunebugExpressway.Worker.start_link(arg1, arg2, arg3)
       # worker(TurnJunebugExpressway.Worker, [arg1, arg2, arg3]),
       worker(TurnJunebugExpressway.MessageEngine, []),
-      worker(TurnJunebugExpressway.HttpPushEngine, [])
+      worker(TurnJunebugExpressway.HttpPushEngine, []),
+      {Task.Supervisor, name: Task.ExpressSupervisor, restart: :transient}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
