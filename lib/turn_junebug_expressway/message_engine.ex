@@ -112,24 +112,41 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
     {:noreply, chan}
   end
 
+  def ack_processed_msg(channel, tag) do
+    Basic.ack(channel, tag)
+  end
+
+  def reject_failed_msg(channel, tag, redelivered, msg) do
+    Basic.reject(channel, tag, requeue: not redelivered)
+
+    case redelivered do
+      false -> IO.puts(msg)
+      true -> raise msg
+    end
+  end
+
+  def start_consume_message_task(channel, tag, redelivered, payload) do
+    case Task.ExpressSupervisor
+         |> Task.Supervisor.async(fn ->
+           TurnJunebugExpressway.ConsumeMessageTask.process_msg(payload)
+         end)
+         |> Task.await() do
+      :ok ->
+        ack_processed_msg(channel, tag)
+
+      {:error, status, reason} ->
+        reject_failed_msg(
+          channel,
+          tag,
+          redelivered,
+          "Error sending event: #{status} -> #{reason}"
+        )
+    end
+  end
+
   defp consume(channel, tag, redelivered, payload) do
     spawn(fn ->
-      case {Task.ExpressSupervisor
-            |> Task.Supervisor.async(fn ->
-              TurnJunebugExpressway.ConsumeMessageTask.process_msg(payload)
-            end)
-            |> Task.await(), redelivered} do
-        {:ok, _} ->
-          Basic.ack(channel, tag)
-
-        {{:error, status, reason}, false} ->
-          IO.puts("Error sending event: #{status} -> #{reason}")
-          Basic.reject(channel, tag, requeue: true)
-
-        {{:error, status, reason}, true} ->
-          Basic.reject(channel, tag, requeue: false)
-          raise "Error sending event: #{status} -> #{reason}"
-      end
+      start_consume_message_task(channel, tag, redelivered, payload)
     end)
   end
 end
