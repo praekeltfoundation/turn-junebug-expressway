@@ -114,23 +114,21 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
 
   defp consume(channel, tag, redelivered, payload) do
     spawn(fn ->
-      case Task.Supervisor.async(
-             Task.ExpressSupervisor,
-             fn ->
-               TurnJunebugExpressway.ConsumeMessageTask.process_msg(payload)
-             end
-           )
-           |> Task.await() do
-        :ok ->
+      case {Task.ExpressSupervisor
+            |> Task.Supervisor.async(fn ->
+              TurnJunebugExpressway.ConsumeMessageTask.process_msg(payload)
+            end)
+            |> Task.await(), redelivered} do
+        {:ok, _} ->
           Basic.ack(channel, tag)
 
-        {:error, status, reason} ->
+        {{:error, status, reason}, false} ->
           IO.puts("Error sending event: #{status} -> #{reason}")
-          Basic.reject(channel, tag, requeue: not redelivered)
+          Basic.reject(channel, tag, requeue: true)
 
-          if redelivered do
-            raise "Error sending event: #{status} -> #{reason}"
-          end
+        {{:error, status, reason}, true} ->
+          Basic.reject(channel, tag, requeue: false)
+          raise "Error sending event: #{status} -> #{reason}"
       end
     end)
   end
