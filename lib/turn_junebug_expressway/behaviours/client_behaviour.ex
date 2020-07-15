@@ -15,6 +15,23 @@ defmodule TurnJunebugExpressway.Behaviours.ClientBehaviour do
     quote do
       @behaviour TurnJunebugExpressway.Behaviours.ClientBehaviour
       use Tesla
+
+      def do_post(client, path, body, headers \\ []) do
+        case client
+             |> post(path, body, headers: headers) do
+          {:ok, %Tesla.Env{status: status}} when status in 200..299 ->
+            :ok
+
+          {:ok, %Tesla.Env{status: status} = reason} ->
+            {:error, status, reason}
+
+          {:error, %Tesla.Env{status: status} = reason} ->
+            {:error, status, reason}
+
+          {:error, reason} when is_atom(reason) ->
+            {:error, 503, reason}
+        end
+      end
     end
   end
 end

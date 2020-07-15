@@ -47,6 +47,7 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
         {:ok, channel} = AMQP.Channel.open(conn)
 
         queue_name = Utils.get_env(:rabbitmq, :messages_queue)
+        queue_concurrency = Utils.get_env(:rabbitmq, :queue_concurrency)
         exchange_name = Utils.get_env(:rabbitmq, :exchange_name)
 
         # Declare a exchange for testing
@@ -65,7 +66,7 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
           routing_key: "#{queue_name}.event"
         )
 
-        :ok = Basic.qos(channel, prefetch_count: 1)
+        :ok = Basic.qos(channel, prefetch_count: queue_concurrency)
 
         {:ok, _consumer_tag} = AMQP.Basic.consume(channel, "#{queue_name}.event", nil)
 
@@ -111,30 +112,56 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
     {:noreply, chan}
   end
 
+  def ack_processed_msg(channel, tag) do
+    Basic.ack(channel, tag)
+  end
+
+  def reject_failed_msg(channel, tag, redelivered, msg) do
+    Basic.reject(channel, tag, requeue: not redelivered)
+
+    case redelivered do
+      false -> IO.puts(msg)
+      true -> raise msg
+    end
+  end
+
+  def start_consume_message_task(channel, tag, redelivered, payload) do
+    case Task.ExpressSupervisor
+         |> Task.Supervisor.async(fn ->
+           TurnJunebugExpressway.ConsumeMessageTask.process_msg(payload)
+         end)
+         |> Task.await() do
+      :ok ->
+        ack_processed_msg(channel, tag)
+
+      {:error, status, reason} ->
+        reject_failed_msg(
+          channel,
+          tag,
+          redelivered,
+          "Error sending event: #{status} -> #{reason}"
+        )
+    end
+  end
+
   defp consume(channel, tag, redelivered, payload) do
-    :ok =
-      case Utils.handle_incoming_event(payload) do
-        :ok ->
-          Basic.ack(channel, tag)
+    spawn(fn ->
+      start_consume_message_task(channel, tag, redelivered, payload)
+    end)
+  end
+end
 
-        {:error, status, reason} ->
-          IO.puts("Error sending event: #{status} -> #{reason}")
-          Basic.reject(channel, tag, requeue: not redelivered)
+defmodule TurnJunebugExpressway.ConsumeMessageTask do
+  use Task
 
-          if redelivered do
-            raise "Error sending event: #{status} -> #{reason}"
-          end
-      end
-  rescue
-    exception ->
-      :ok = Basic.reject(channel, tag, requeue: not redelivered)
-      IO.puts("Error with event #{payload}")
-      # credo:disable-for-next-line
-      IO.inspect(exception)
+  alias TurnJunebugExpresswayWeb.Utils
 
-      if redelivered do
-        reraise exception, __STACKTRACE__
-      end
+  def start_link() do
+    Task.start_link(ConsumeMessageTask, :run, [])
+  end
+
+  def process_msg(payload) do
+    Utils.handle_incoming_event(payload)
   end
 end
 

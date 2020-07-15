@@ -30,19 +30,4 @@ defmodule TurnJunebugExpressway.RapidproClient do
     client
     |> do_post(Utils.get_env(:rapidpro, :channel_url), body)
   end
-
-  def do_post(client, path, body, headers \\ []) do
-    case client
-         |> post(path, body, headers) do
-      {:ok, %Tesla.Env{status: status}}
-      when status in 200..299 ->
-        :ok
-
-      {:ok, %Tesla.Env{status: status} = reason} ->
-        {:error, status, reason}
-
-      {:error, %Tesla.Env{status: status} = reason} ->
-        {:error, status, reason}
-    end
-  end
 end
