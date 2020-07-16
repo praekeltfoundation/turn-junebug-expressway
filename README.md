@@ -31,6 +31,7 @@ Related Turn docs: https://whatsapp.praekelt.org/docs/index.html#turn-fallback-c
 
 #### Junebug
 * `MESSAGES_QUEUE` - AMQP queue where junebug is consuming from.
+* `QUEUE_CONCURRENCY` - Amount of messages pulled from queue to process concurrently, defaults to 1
 * `JUNEBUG_TRANSPORT_TYPE` - Transport type used in message payload sent to Junebug
 * `JUNEBUG_FROM_ADDR` - From address used in message payload sent to Junebug
 * `AMQP_HOST` - AMQP host for Junebug

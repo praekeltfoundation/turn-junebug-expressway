@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.14
+-----------
+Added concurrency to the HttpPushEngine.
+
 0.0.13
 -----------
 Fixed sentry logging for incoming events/messages
