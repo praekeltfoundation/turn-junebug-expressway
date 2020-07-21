@@ -43,6 +43,7 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
       {:ok, conn} ->
         # Get notifications when the connection goes down
         Process.monitor(conn.pid)
+        Process.flag(:trap_exit, true)
 
         {:ok, channel} = AMQP.Channel.open(conn)
 
@@ -91,6 +92,11 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
   end
 
   def handle_info({:DOWN, _, :process, _pid, reason}, _) do
+    # Stop GenServer. Will be restarted by Supervisor.
+    {:stop, {:connection_lost, reason}, nil}
+  end
+
+  def handle_info({:EXIT, _pid, reason}, _) do
     # Stop GenServer. Will be restarted by Supervisor.
     {:stop, {:connection_lost, reason}, nil}
   end
