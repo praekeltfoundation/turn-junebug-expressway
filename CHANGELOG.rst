@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.15
+-----------
+Handle exit signal properly on HttpPushEngine
+
 0.0.14
 -----------
 Added concurrency to the HttpPushEngine.
