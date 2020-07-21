@@ -122,8 +122,10 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
     Basic.ack(channel, tag)
   end
 
-  def reject_failed_msg(channel, tag, redelivered, msg) do
+  def reject_failed_msg(channel, tag, redelivered, status, reason) do
     Basic.reject(channel, tag, requeue: not redelivered)
+
+    msg = "Error sending event: #{status} -> #{reason}"
 
     case redelivered do
       false -> IO.puts(msg)
@@ -145,7 +147,8 @@ defmodule TurnJunebugExpressway.HttpPushEngine do
           channel,
           tag,
           redelivered,
-          "Error sending event: #{status} -> #{reason}"
+          status,
+          reason
         )
     end
   end
