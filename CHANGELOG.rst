@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.16
+-----------
+Fix handling of client errors.
+
 0.0.15
 -----------
 Handle exit signal properly on HttpPushEngine
