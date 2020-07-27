@@ -199,16 +199,15 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     messages = body |> Map.get("messages")
     rate = get_in(body, ["message_stats", "ack_details", "rate"])
 
-    case {rate, messages} do
-      {nil, _} ->
-        %{"name" => "#{queue_name}", "stuck" => false, "messages" => messages}
+    stuck =
+      case {rate, messages} do
+        {nil, _} -> false
+        {rate, messages} when rate == 0 and messages == 0 -> false
+        {rate, messages} when rate > 0 and messages > 0 -> false
+        {rate, messages} when rate <= 0 and messages > 0 -> true
+      end
 
-      {rate, messages} when rate <= 0 and messages > 0 ->
-        %{"name" => "#{queue_name}", "stuck" => true, "messages" => messages}
-
-      {rate, messages} when rate > 0 and messages > 0 ->
-        %{"name" => "#{queue_name}", "stuck" => false, "messages" => messages}
-    end
+    %{"name" => "#{queue_name}", "stuck" => stuck, "messages" => messages}
   end
 
   def get_all_queue_details(management_interface) do
