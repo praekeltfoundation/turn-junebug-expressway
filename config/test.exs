@@ -22,4 +22,5 @@ config :turn_junebug_expressway, :rabbitmq,
   password: System.get_env("AMQP_PASSWORD", "guest"),
   host: System.get_env("AMQP_HOST", "localhost"),
   port: String.to_integer(System.get_env("AMQP_PORT", "5672")),
-  vhost: System.get_env("AMQP_VHOST", "/")
+  vhost: System.get_env("AMQP_VHOST", "/"),
+  management_interface: "http://rabbitmq-test:15672"
