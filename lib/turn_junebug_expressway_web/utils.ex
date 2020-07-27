@@ -192,4 +192,53 @@ defmodule TurnJunebugExpresswayWeb.Utils do
         error
     end
   end
+
+  def get_queue_info(client, vhost, queue_name) do
+    {:ok, %Tesla.Env{body: body}} = client |> get("/api/queues/#{vhost}/#{queue_name}")
+
+    messages = body |> Map.get("messages")
+    rate = get_in(body, ["message_stats", "ack_details", "rate"])
+
+    case {rate, messages} do
+      {nil, _} ->
+        %{"name" => "#{queue_name}", "stuck" => false, "messages" => messages}
+
+      {rate, messages} when rate <= 0 and messages > 0 ->
+        %{"name" => "#{queue_name}", "stuck" => true, "messages" => messages}
+
+      {rate, messages} when rate > 0 and messages > 0 ->
+        %{"name" => "#{queue_name}", "stuck" => false, "messages" => messages}
+    end
+  end
+
+  def get_all_queue_details(management_interface) do
+    queue_name = get_env(:rabbitmq, :messages_queue)
+    username = get_env(:rabbitmq, :username)
+    password = get_env(:rabbitmq, :password)
+    vhost = String.replace(get_env(:rabbitmq, :vhost), "/", "%2f")
+
+    middleware = [
+      {Tesla.Middleware.BaseUrl, management_interface},
+      {Tesla.Middleware.BasicAuth, %{username: username, password: password}},
+      Tesla.Middleware.JSON
+    ]
+
+    client = Tesla.client(middleware)
+
+    results =
+      ["event", "inbound"]
+      |> Enum.map(fn queue ->
+        client
+        |> get_queue_info(vhost, "#{queue_name}.#{queue}")
+      end)
+
+    stuck_queues =
+      results
+      |> Enum.filter(fn
+        %{"stuck" => true} -> true
+        %{"stuck" => false} -> false
+      end)
+
+    {Enum.count(stuck_queues) > 0, results}
+  end
 end

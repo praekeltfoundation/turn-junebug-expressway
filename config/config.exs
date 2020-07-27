@@ -35,7 +35,8 @@ config :turn_junebug_expressway, :rabbitmq,
   password: System.get_env("AMQP_PASSWORD", "guest"),
   host: System.get_env("AMQP_HOST", "localhost"),
   port: String.to_integer(System.get_env("AMQP_PORT", "5672")),
-  vhost: System.get_env("AMQP_VHOST", "/")
+  vhost: System.get_env("AMQP_VHOST", "/"),
+  management_interface: System.get_env("AMQP_MANAGEMENT_INTERFACE")
 
 config :turn_junebug_expressway, :junebug,
   from_addr: System.get_env("JUNEBUG_FROM_ADDR", "+2712345"),
