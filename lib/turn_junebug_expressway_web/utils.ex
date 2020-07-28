@@ -193,21 +193,24 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     end
   end
 
+  def is_queue_stuck(rate, messages) do
+    case {rate, messages} do
+      {rate, messages} when rate <= 0 and messages > 0 -> true
+      {_, _} -> false
+    end
+  end
+
   def get_queue_info(client, vhost, queue_name) do
     {:ok, %Tesla.Env{body: body}} = client |> get("/api/queues/#{vhost}/#{queue_name}")
 
     messages = body |> Map.get("messages")
     rate = get_in(body, ["message_stats", "ack_details", "rate"])
 
-    stuck =
-      case {rate, messages} do
-        {nil, _} -> false
-        {rate, messages} when rate == 0 and messages == 0 -> false
-        {rate, messages} when rate > 0 and messages > 0 -> false
-        {rate, messages} when rate <= 0 and messages > 0 -> true
-      end
-
-    %{"name" => "#{queue_name}", "stuck" => stuck, "messages" => messages}
+    %{
+      "name" => "#{queue_name}",
+      "stuck" => is_queue_stuck(rate, messages),
+      "messages" => messages
+    }
   end
 
   def get_all_queue_details(management_interface) do
