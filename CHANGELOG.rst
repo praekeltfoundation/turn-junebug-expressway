@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.17
+-----------
+Check queue status in health check.
+
 0.0.16
 -----------
 Fix handling of client errors.

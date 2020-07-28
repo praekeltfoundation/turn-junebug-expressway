@@ -38,6 +38,7 @@ Related Turn docs: https://whatsapp.praekelt.org/docs/index.html#turn-fallback-c
 * `AMQP_USER` - AMQP user for Junebug
 * `AMQP_PASSWORD` - AMQP password for Junebug
 * `AMQP_VHOST` - AMQP vhost for Junebug
+* `AMQP_MANAGEMENT_INTERFACE` - If this is set the queues will be checked in the `/health` endpoint. (Optional)
 
 #### Other
 * `SENTRY_DSN` - The sentry dsn to send exceptions to.
