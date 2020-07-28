@@ -39,7 +39,12 @@ defmodule TurnJunebugExpresswayWeb.DefaultControllerTest do
           headers: [{"authorization", "Basic Z3Vlc3Q6Z3Vlc3Q="}]
         } ->
           json(%{
-            "messages" => 0
+            "messages" => 0,
+            "message_stats" => %{
+              "ack_details" => %{
+                rate: 0.0
+              }
+            }
           })
       end)
 
