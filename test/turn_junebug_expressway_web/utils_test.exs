@@ -162,4 +162,26 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
       :ok = Utils.handle_incoming_event(Jason.encode!(event))
     end
   end
+
+  describe "is_queue_stuck" do
+    test "true if rate is 0 and there is messages", %{} do
+      assert Utils.is_queue_stuck(0, 1) == true
+    end
+
+    test "false if the rate is above one and there is messages", %{} do
+      assert Utils.is_queue_stuck(1, 1) == false
+    end
+
+    test "false if the rate is 0 one and there is no messages", %{} do
+      assert Utils.is_queue_stuck(0, 0) == false
+    end
+
+    test "false if there is no rate", %{} do
+      assert Utils.is_queue_stuck(nil, 1) == false
+    end
+
+    test "false if the rate is above one and there is no messages", %{} do
+      assert Utils.is_queue_stuck(1, 0) == false
+    end
+  end
 end
