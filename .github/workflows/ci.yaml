@@ -34,12 +34,12 @@ jobs:
     strategy:
       matrix:
         include:
-          # This is what Travis runs.
+          # This is what docker builds.
           - elixir-version: "1.9"
             otp-version: "21"
-          # Let's worry about updates later.
-          # - elixir-version: "1.17"
-          #   otp-version: "27"
+          # Current (at time of writing) versions.
+          - elixir-version: "1.17"
+            otp-version: "27"
 
     steps:
       - uses: actions/checkout@v4
