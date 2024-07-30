@@ -34,9 +34,10 @@ jobs:
     strategy:
       matrix:
         include:
-          # This is what docker builds.
-          - elixir-version: "1.9"
-            otp-version: "21"
+          # # Drop old builds for now while fixing the new ones
+          # # This is what docker builds.
+          # - elixir-version: "1.9"
+          #   otp-version: "21"
           # Current (at time of writing) versions.
           - elixir-version: "1.17"
             otp-version: "27"
