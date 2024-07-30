@@ -1,4 +1,4 @@
-FROM elixir:1.9 as elixir
+FROM elixir:1.17 as elixir
 ENV MIX_ENV="prod"
 COPY lib lib
 COPY config config
