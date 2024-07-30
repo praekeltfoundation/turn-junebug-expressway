@@ -1,0 +1,42 @@
+name: Continuous integration
+on:
+  push:
+    branches: ["*"]
+    tags: ["v*"]
+  pull_request:
+    branches: ["develop"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          # This is what Travis runs.
+          - elixir-version: "1.9"
+            otp-version: "20.3"
+          # Let's worry about updates later.
+          # - elixir-version: "1.17"
+          #   otp-version: "27"
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        id: beam
+        with:
+          elixir-version: ${{ matrix.elixir-version }}
+          otp-version: ${{ matrix.otp-version }}
+
+      - name: Fetch deps
+        run: |
+          mix deps.get
+
+      - name: Run tests
+        run: |
+          # This is basically `mix test` with coverage enabled.
+          mix coveralls.json
+          mix format --check-formatted
+          # This will mention FIXME and TODO comments without failing, any
+          # other issue fails the build.
+          mix credo
