@@ -4,8 +4,6 @@ defmodule TurnJunebugExpressway.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     # Metrics
     TurnJunebugExpresswayWeb.PhoenixInstrumenter.setup()
     TurnJunebugExpresswayWeb.PipelineInstrumenter.setup()
@@ -14,11 +12,11 @@ defmodule TurnJunebugExpressway.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      supervisor(TurnJunebugExpresswayWeb.Endpoint, []),
+      TurnJunebugExpresswayWeb.Endpoint,
       # Start your own worker by calling: TurnJunebugExpressway.Worker.start_link(arg1, arg2, arg3)
-      # worker(TurnJunebugExpressway.Worker, [arg1, arg2, arg3]),
-      worker(TurnJunebugExpressway.MessageEngine, []),
-      worker(TurnJunebugExpressway.HttpPushEngine, []),
+      # {TurnJunebugExpressway.Worker, [arg1, arg2, arg3]},
+      {TurnJunebugExpressway.MessageEngine, name: TurnJunebugExpressway.MessageEngine},
+      {TurnJunebugExpressway.HttpPushEngine, name: TurnJunebugExpressway.HttpPushEngine},
       {Task.Supervisor, name: Task.ExpressSupervisor, restart: :transient}
     ]
 

@@ -5,9 +5,9 @@ defmodule TurnJunebugExpressway.Mixfile do
     [
       app: :turn_junebug_expressway,
       version: "0.0.18",
-      elixir: "~> 1.9",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
