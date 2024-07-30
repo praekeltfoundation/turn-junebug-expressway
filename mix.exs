@@ -58,6 +58,9 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:mox, "~> 0.5", only: :test},
       {:sentry, "~> 7.2"},
 
+      # We need to override this to make it compile with newer Elixir/OTP.
+      {:ssl_verify_fun, "~> 1.1.5", manager: :rebar3, override: true},
+
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},
       {:credo, "~> 0.9", only: [:dev, :test], runtime: false}
