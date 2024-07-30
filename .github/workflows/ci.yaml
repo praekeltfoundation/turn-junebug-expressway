@@ -8,14 +8,15 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     strategy:
       matrix:
         include:
           # This is what Travis runs.
           - elixir-version: "1.9"
-            otp-version: "20"
+            otp-version: "20.3"
           # Let's worry about updates later.
           # - elixir-version: "1.17"
           #   otp-version: "27"
