@@ -15,7 +15,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
       |> Map.get("x-turn-hook-signature")
 
     our_hmac =
-      :crypto.hmac(
+      :crypto.mac(
+        :hmac,
         :sha256,
         get_env(:turn, :hmac_secret),
         conn.private[:raw_body]
