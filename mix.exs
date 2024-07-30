@@ -52,7 +52,7 @@ defmodule TurnJunebugExpressway.Mixfile do
       # {:prometheus_process_collector, "~> 1.6.0"},
       {:plug_cowboy, "~> 2.1"},
       {:jason, "~> 1.1"},
-      {:amqp, "~> 1.3"},
+      {:amqp, "~> 3.3"},
       {:timex, "~> 3.5"},
       {:tesla, "~> 1.2"},
       {:mock, "~> 0.3.2"},
