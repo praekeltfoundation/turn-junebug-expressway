@@ -1,4 +1,5 @@
-FROM elixir:1.17 as elixir
+# NOTE: One of the dependecies (rabbit_common) is incompatible with OTP 27.
+FROM elixir:1.17-otp-26 as elixir
 ENV MIX_ENV="prod"
 COPY lib lib
 COPY config config

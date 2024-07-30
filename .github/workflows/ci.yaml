@@ -34,13 +34,9 @@ jobs:
     strategy:
       matrix:
         include:
-          # # Drop old builds for now while fixing the new ones
-          # # This is what docker builds.
-          # - elixir-version: "1.9"
-          #   otp-version: "21"
-          # Current (at time of writing) versions.
+          # NOTE: One of the dependecies (rabbit_common) is incompatible with OTP 27.
           - elixir-version: "1.17"
-            otp-version: "27"
+            otp-version: "26"
 
     steps:
       - uses: actions/checkout@v4
@@ -53,15 +49,6 @@ jobs:
       - name: Fetch deps
         run: |
           mix deps.get
-
-      # - name: Compile prometheus_process_collector
-      #   run: |
-      #     # The prometheus_process_collector's makefile doesn't work properly
-      #     # for new OTP, so we set the variables it needs in a way that works.
-      #     export ERTS_INCLUDE_DIR=$(erl -noshell -eval "io:format(\"~s/erts-~s/include/\", [code:root_dir(), erlang:system_info(version)])." -s init stop)
-      #     export ERL_INTERFACE_INCLUDE_DIR=$(erl -noshell -eval "io:format(\"~s\", [code:lib_dir(erl_interface, include)])." -s init stop)
-      #     export ERL_INTERFACE_LIB_DIR=$(erl -noshell -eval "io:format(\"~s\", [code:lib_dir(erl_interface, lib)])." -s init stop)
-      #     MIX_ENV=test mix deps.compile prometheus_process_collector
 
       - name: Run tests
         run: |
