@@ -19,8 +19,7 @@ defmodule TurnJunebugExpressway.Behaviours.ClientBehaviour do
       def format_error(body) when is_map(body) do
         body
         |> Map.keys()
-        |> Enum.map(fn key -> "#{key}: #{format_error(body[key])}" end)
-        |> Enum.join(", ")
+        |> Enum.map_join(", ", fn key -> "#{key}: #{format_error(body[key])}" end)
       end
 
       def format_error(body) do

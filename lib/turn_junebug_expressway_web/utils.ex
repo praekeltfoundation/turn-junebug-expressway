@@ -196,7 +196,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
     end
   end
 
-  def is_queue_stuck(rate, messages) do
+  def queue_stuck?(rate, messages) do
     case {rate, messages} do
       {rate, messages} when rate <= 0 and messages > 0 -> true
       {_, _} -> false
@@ -211,7 +211,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
     %{
       "name" => "#{queue_name}",
-      "stuck" => is_queue_stuck(rate, messages),
+      "stuck" => queue_stuck?(rate, messages),
       "messages" => messages
     }
   end
