@@ -1,8 +1,8 @@
 defmodule TurnJunebugExpresswayWeb.Utils do
   use Tesla
 
-  @turn_client Application.get_env(:turn_junebug_expressway, :turn_client)
-  @rapidpro_client Application.get_env(:turn_junebug_expressway, :rapidpro_client)
+  @turn_client Application.compile_env(:turn_junebug_expressway, :turn_client)
+  @rapidpro_client Application.compile_env(:turn_junebug_expressway, :rapidpro_client)
 
   def get_env(section, key) do
     Application.get_env(:turn_junebug_expressway, section)[key]
@@ -113,7 +113,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def forward_event(event) do
-    IO.inspect(event)
+    IO.puts("FORWARD_EVENT: #{inspect(event)}")
 
     case event |> get_event_status do
       {:ignore, _} ->
