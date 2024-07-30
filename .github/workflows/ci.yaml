@@ -69,8 +69,6 @@ jobs:
           mix coveralls.json
 
       - name: Lints
-        # Let the build succeed for now even if the lints fail.
-        continue-on-error: true
         run: |
           mix format --check-formatted
           # This will mention FIXME and TODO comments without failing, any
