@@ -112,6 +112,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def forward_event(event) do
+    IO.inspect(event)
     case event |> get_event_status do
       {:ignore, _} ->
         :ok
