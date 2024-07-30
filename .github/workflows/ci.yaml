@@ -15,7 +15,7 @@ jobs:
         include:
           # This is what Travis runs.
           - elixir-version: "1.9"
-            otp-version: "20.3"
+            otp-version: "20"
           # Let's worry about updates later.
           # - elixir-version: "1.17"
           #   otp-version: "27"
