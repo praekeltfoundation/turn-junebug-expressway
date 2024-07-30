@@ -48,7 +48,8 @@ defmodule TurnJunebugExpressway.Mixfile do
       {:gettext, "~> 0.17.1"},
       {:prometheus_phoenix, "~> 1.3.0"},
       {:prometheus_plugs, "~> 1.1.5"},
-      {:prometheus_process_collector, "~> 1.6.0"},
+      # It looks like we don't actually need this.
+      # {:prometheus_process_collector, "~> 1.6.0"},
       {:plug_cowboy, "~> 2.1"},
       {:jason, "~> 1.1"},
       {:amqp, "~> 1.3"},
