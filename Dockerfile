@@ -11,7 +11,7 @@ RUN mix deps.get
 RUN mix deps.compile
 RUN mix compile
 
-FROM elixir:1.9-alpine
+FROM elixir:1.17-otp-26-alpine
 ENV MIX_ENV="prod"
 RUN mix local.hex --force
 RUN mix local.rebar --force
