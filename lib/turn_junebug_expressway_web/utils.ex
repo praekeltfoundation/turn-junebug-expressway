@@ -1,6 +1,6 @@
 defmodule TurnJunebugExpresswayWeb.Utils do
   use Tesla
-
+  alias TurnJunebugExpressway.TurnAgent
   @turn_client Application.compile_env(:turn_junebug_expressway, :turn_client)
   @rapidpro_client Application.compile_env(:turn_junebug_expressway, :rapidpro_client)
 
@@ -62,6 +62,11 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def send_message(message) do
+    key = Map.get(message, "user_message_id")
+    value = Map.get(message, "recipient_id")
+    #IO.puts("#{message}")
+    #IO.puts("#{inspect(key)}, #{inspect(value)}")
+    TurnJunebugExpressway.TurnAgent.put(key, value)
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
 
@@ -113,24 +118,28 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def forward_event(event) do
-    IO.puts("FORWARD_EVENT: #{inspect(event)}")
+    #IO.puts("#{inspect(event)}")
+    IO.inspect("#{inspect(TurnAgent.get(Map.get(event, "user_message_id")))}")
 
     case event |> get_event_status do
       {:ignore, _} ->
         :ok
 
       {:ok, status} ->
-        @turn_client.client()
-        |> @turn_client.post_event(%{
-          "statuses" => [
-            %{
-              "id" => Map.get(event, "user_message_id"),
-              "recipient_id" => nil,
-              "status" => status,
-              "timestamp" => get_event_timestamp(event, :second)
-            }
-          ]
-        })
+        if recipient_id = TurnAgent.get(Map.get(event, "user_message_id")) != nil do
+          @turn_client.client()
+          |> @turn_client.post_event(%{
+            "statuses" => [
+              %{
+                "id" => Map.get(event, "user_message_id"),
+                #"recipient_id" => nil,
+                "recipient_id" =>  TurnAgent.get(Map.get(event, "user_message_id")),
+                "status" => status,
+                "timestamp" => get_event_timestamp(event, :second)
+              }
+            ]
+          })
+        end
     end
   end
 
