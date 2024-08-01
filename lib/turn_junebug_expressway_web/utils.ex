@@ -119,7 +119,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
   def forward_event(event) do
     # IO.puts("#{inspect(event)}")
-    IO.inspect("#{inspect(TurnAgent.get(Map.get(event, "user_message_id")))}")
+    IO.puts("#{inspect(TurnAgent.get(Map.get(event, "user_message_id")))}")
 
     case event |> get_event_status do
       {:ignore, _} ->
