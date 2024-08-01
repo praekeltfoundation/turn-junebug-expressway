@@ -64,8 +64,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def send_message(message) do
     key = Map.get(message, "user_message_id")
     value = Map.get(message, "recipient_id")
-    #IO.puts("#{message}")
-    #IO.puts("#{inspect(key)}, #{inspect(value)}")
+    # IO.puts("#{message}")
+    # IO.puts("#{inspect(key)}, #{inspect(value)}")
     TurnJunebugExpressway.TurnAgent.put(key, value)
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
@@ -118,7 +118,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def forward_event(event) do
-    #IO.puts("#{inspect(event)}")
+    # IO.puts("#{inspect(event)}")
     IO.inspect("#{inspect(TurnAgent.get(Map.get(event, "user_message_id")))}")
 
     case event |> get_event_status do
@@ -132,8 +132,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
             "statuses" => [
               %{
                 "id" => Map.get(event, "user_message_id"),
-                #"recipient_id" => nil,
-                "recipient_id" =>  TurnAgent.get(Map.get(event, "user_message_id")),
+                # "recipient_id" => nil,
+                "recipient_id" => TurnAgent.get(Map.get(event, "user_message_id")),
                 "status" => status,
                 "timestamp" => get_event_timestamp(event, :second)
               }
