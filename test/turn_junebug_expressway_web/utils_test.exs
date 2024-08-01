@@ -85,7 +85,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "message_type" => "event"
       }
 
-      #assert Utils.handle_incoming_event(Jason.encode!(event)) == nil
+      # assert Utils.handle_incoming_event(Jason.encode!(event)) == nil
     end
 
     test "sends event back to turn", %{} do
