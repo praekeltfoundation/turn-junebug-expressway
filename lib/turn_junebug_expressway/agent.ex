@@ -1,17 +1,36 @@
 defmodule TurnJunebugExpressway.TurnAgent do
-  use Agent
+  use GenServer
 
-  def start_link(_) do
-    Agent.start_link(fn -> %{} end, name: __MODULE__)
+  def start_link(options \\ []) do
+    {name, options} = Keyword.pop(options, :name, __MODULE__)
+    GenServer.start_link(__MODULE__, options, name: name)
   end
 
-  def put(key, value) do
-    Agent.update(__MODULE__, &Map.put(&1, key, value))
+  def put(pid, key, value, ttl \\ 2_000) do
+    GenServer.call(pid, {:put, key, value, ttl})
   end
 
-  def get(key) do
-    Agent.get(__MODULE__, &Map.get(&1, key))
+  def get(pid, key) do
+    GenServer.call(pid, {:get, key})
   end
 
-  # TODO: Add a way to clear the cache after a set time
+  # GenServer callbacks
+
+  def init(_) do
+    state = %{}
+    {:ok, state}
+  end
+
+  def handle_call({:put, key, value, ttl}, _from, state) do
+    Process.send_after(self(), {:expire, key}, ttl)
+    {:reply, :ok, Map.put(state, key, value)}
+  end
+
+  def handle_call({:get, key}, _from, state) do
+    {:reply, Map.get(state, key), state}
+  end
+
+  def handle_info({:expire, key}, state) do
+    {:noreply, Map.delete(state, key)}
+  end
 end
