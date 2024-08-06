@@ -5,6 +5,8 @@
 # is restricted to this project.
 import Config
 
+config :turn_junebug_expressway, cache_ttl: 1_000
+
 # Configures the endpoint
 config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   url: [host: "localhost"],

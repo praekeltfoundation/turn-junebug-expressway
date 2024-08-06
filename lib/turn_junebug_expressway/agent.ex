@@ -1,4 +1,4 @@
-defmodule TurnJunebugExpressway.TurnAgent do
+defmodule TurnJunebugExpressway.MessageRecipientIdCache do
   use GenServer
 
   def start_link(options \\ []) do
@@ -6,7 +6,12 @@ defmodule TurnJunebugExpressway.TurnAgent do
     GenServer.start_link(__MODULE__, options, name: name)
   end
 
-  def put(pid, key, value, ttl \\ 2_000) do
+  def put(
+        pid,
+        key,
+        value,
+        ttl \\ Application.get_env(:turn_junebug_expressway, :cache_ttl, 10_000)
+      ) do
     GenServer.call(pid, {:put, key, value, ttl})
   end
 

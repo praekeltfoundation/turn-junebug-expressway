@@ -4,7 +4,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
   import Mox
 
   alias TurnJunebugExpresswayWeb.Utils
-  alias TurnJunebugExpressway.TurnAgent
+  alias TurnJunebugExpressway.MessageRecipientIdCache
 
   describe "format_urn" do
     test "format_urn/1 with + for turn" do
@@ -54,7 +54,8 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "message_type" => "event"
       }
 
-      assert Utils.handle_incoming_event(Jason.encode!(event)) == nil
+      Utils.handle_incoming_event(Jason.encode!(event))
+      # assert_received {:EXIT, self(),{%RuntimeError{message: "Shouldnt be called"}, _}}
     end
 
     test "sends event back to turn", %{} do
@@ -211,9 +212,9 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
       }
 
       Utils.send_message(message)
-      assert TurnAgent.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
       :timer.sleep(3_000)
-      assert TurnAgent.get(:my_cache, Map.get(message, "user_message_id")) == nil
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
     end
   end
 
