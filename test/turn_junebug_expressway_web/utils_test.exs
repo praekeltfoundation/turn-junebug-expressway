@@ -40,6 +40,14 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
       |> expect(:client, fn -> :client end)
       |> expect(:post_event, fn :client, _ -> raise "Shouldnt be called" end)
 
+      message = %{
+        "content" => "something",
+        "recipient_id" => nil,
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+      }
+
+      Utils.send_message(message)
+
       event = %{
         "transport_name" => "d49d3569-47d5-47a0-8074-5a7ffa684832",
         "event_type" => "ack",
@@ -54,8 +62,9 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "message_type" => "event"
       }
 
-      Utils.handle_incoming_event(Jason.encode!(event))
-      # assert_received {:EXIT, self(),{%RuntimeError{message: "Shouldnt be called"}, _}}
+      # Utils.handle_incoming_event(Jason.encode!(event))
+
+      assert Utils.handle_incoming_event(Jason.encode!(event)) == nil
     end
 
     test "sends event back to turn", %{} do

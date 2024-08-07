@@ -10,7 +10,7 @@ defmodule TurnJunebugExpressway.MessageRecipientIdCache do
         pid,
         key,
         value,
-        ttl \\ Application.get_env(:turn_junebug_expressway, :cache_ttl, 10_000)
+        ttl \\ get_env(:agent, :ttl) |> String.to_integer()
       ) do
     GenServer.call(pid, {:put, key, value, ttl})
   end
@@ -37,5 +37,9 @@ defmodule TurnJunebugExpressway.MessageRecipientIdCache do
 
   def handle_info({:expire, key}, state) do
     {:noreply, Map.delete(state, key)}
+  end
+
+  def get_env(section, key) do
+    Application.get_env(:turn_junebug_expressway, section)[key]
   end
 end
