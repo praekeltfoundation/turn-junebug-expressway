@@ -220,9 +220,22 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
-      Utils.send_message(message)
+      Utils.send_message(message, 1000)
       assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
       :timer.sleep(3_000)
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
+    end
+
+    test "checking if key is deleated after default ttl" do
+      message = %{
+        "content" => "something",
+        "recipient_id" => "1234",
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+      }
+
+      Utils.send_message(message)
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
+      :timer.sleep(11_000)
       assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
     end
   end
