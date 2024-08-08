@@ -25,6 +25,7 @@ defmodule TurnJunebugExpressway.MessageRecipientIdCache do
     state = %{}
     {:ok, state}
   end
+
   # Setting the same key multiple times, does not extend its lifetime---each call schedules a new expiry 
   def handle_call({:put, key, value, ttl}, _from, state) do
     Process.send_after(self(), {:expire, key}, ttl)
