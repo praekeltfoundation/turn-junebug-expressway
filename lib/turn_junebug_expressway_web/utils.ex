@@ -64,8 +64,9 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def send_message(message, ttl) do
     key = Map.get(message, "user_message_id")
     value = Map.get(message, "recipient_id")
-    # IO.puts("#{message}")
-    # IO.puts("#{inspect(key)}, #{inspect(value)}")
+    IO.puts("send_message1")
+    IO.puts("#{message}")
+    IO.puts("#{inspect(key)}, #{inspect(value)}")
     TurnJunebugExpressway.MessageRecipientIdCache.put(:my_cache, key, value, ttl)
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
@@ -73,8 +74,9 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def send_message(message) do
     key = Map.get(message, "user_message_id")
     value = Map.get(message, "recipient_id")
-    # IO.puts("#{message}")
-    # IO.puts("#{inspect(key)}, #{inspect(value)}")
+    IO.puts("send_message2")
+    IO.puts("#{message}")
+    IO.puts("#{inspect(key)}, #{inspect(value)}")
     TurnJunebugExpressway.MessageRecipientIdCache.put(:my_cache, key, value)
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
