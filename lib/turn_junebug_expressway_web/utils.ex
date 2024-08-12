@@ -131,6 +131,10 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def forward_event(event) do
     IO.puts("#{inspect(event)}")
 
+    IO.puts(
+      "#{inspect(MessageRecipientIdCache.get(:my_cache, Map.get(event, "user_message_id")))}"
+    )
+
     case event |> get_event_status do
       {:ignore, _} ->
         :ok
