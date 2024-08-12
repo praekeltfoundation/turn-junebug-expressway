@@ -64,7 +64,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       # Utils.handle_incoming_event(Jason.encode!(event))
 
-      assert Utils.handle_incoming_event(Jason.encode!(event)) == nil
+      assert Utils.handle_incoming_event(Jason.encode!(event)) == :ok
     end
 
     test "sends event back to turn", %{} do

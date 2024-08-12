@@ -151,6 +151,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
               }
             ]
           })
+        else
+          :ok
         end
     end
   end
