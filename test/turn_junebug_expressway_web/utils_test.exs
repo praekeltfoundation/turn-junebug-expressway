@@ -42,8 +42,8 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       message = %{
         "content" => "something",
-        "recipient_id" => nil,
-        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+        "to_addr" => nil,
+        "message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
       Utils.send_message(message)
@@ -81,8 +81,8 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       message = %{
         "content" => "something",
-        "recipient_id" => "1234",
-        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+        "to_addr" => "1234",
+        "message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
       Utils.send_message(message)
@@ -113,7 +113,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "statuses" => [
           %{
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
-            "recipient_id" => 1234,
+            "to_addr" => "1234",
             "status" => "sent",
             "timestamp" => "1572525144930"
           }
@@ -122,8 +122,8 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
 
       message = %{
         "content" => "something",
-        "recipient_id" => "1234",
-        "user_message_id" => "16e42b66-03b7-4558-8a72-e9db481fdb4c"
+        "to_addr" => "1234",
+        "message_id" => "16e42b66-03b7-4558-8a72-e9db481fdb4c"
       }
 
       Utils.send_message(message)
@@ -216,27 +216,27 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     test "checking if key is deleated after 3 seconds" do
       message = %{
         "content" => "something",
-        "recipient_id" => "1234",
-        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+        "to_addr" => "1234",
+        "message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
       Utils.send_message(message, 1000)
-      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "message_id")) == "1234"
       :timer.sleep(3_000)
-      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "message_id")) == nil
     end
 
     test "checking if key is deleated after default ttl" do
       message = %{
         "content" => "something",
-        "recipient_id" => "1234",
-        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+        "to_addr" => "1234",
+        "message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
       Utils.send_message(message)
-      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "message_id")) == "1234"
       :timer.sleep(11_000)
-      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "message_id")) == nil
     end
   end
 

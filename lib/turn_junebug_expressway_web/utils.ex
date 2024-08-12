@@ -62,8 +62,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def send_message(message, ttl) do
-    key = Map.get(message, "user_message_id")
-    value = Map.get(message, "recipient_id")
+    key = Map.get(message, "message_id")
+    value = Map.get(message, "to_addr")
     IO.puts("send_message1")
     IO.puts("#{inspect(message)}")
     IO.puts("#{inspect(key)}, #{inspect(value)}")
@@ -72,8 +72,8 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def send_message(message) do
-    key = Map.get(message, "user_message_id")
-    value = Map.get(message, "recipient_id")
+    key = Map.get(message, "message_id")
+    value = Map.get(message, "to_addr")
     IO.puts("send_message2")
     IO.puts("#{inspect(message)}")
     IO.puts("#{inspect(key)}, #{inspect(value)}")
@@ -129,10 +129,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def forward_event(event) do
-    # IO.puts("#{inspect(event)}")
-    IO.puts(
-      "#{inspect(MessageRecipientIdCache.get(:my_cache, Map.get(event, "user_message_id")))}"
-    )
+    IO.puts("#{inspect(event)}")
 
     case event |> get_event_status do
       {:ignore, _} ->
