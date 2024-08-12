@@ -216,7 +216,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     test "checking if key is deleated after 3 seconds" do
       message = %{
         "content" => "something",
-        "recipient_id" => "1234",
+        "to_addr" => "1234",
         "message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
@@ -229,7 +229,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
     test "checking if key is deleated after default ttl" do
       message = %{
         "content" => "something",
-        "recipient_id" => "1234",
+        "to_addr" => "1234",
         "message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
       }
 
