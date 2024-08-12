@@ -1,0 +1,63 @@
+name: Continuous integration
+on:
+  push:
+    branches: ["*"]
+    tags: ["v*"]
+  pull_request:
+    branches: ["develop"]
+
+jobs:
+  test:
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      rabbitmq:
+        image: rabbitmq:3.8
+        env:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
+        ports:
+          - 5672:5672
+
+    strategy:
+      matrix:
+        include:
+          # NOTE: One of the dependecies (rabbit_common) is incompatible with OTP 27.
+          - elixir-version: "1.17"
+            otp-version: "26"
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        id: beam
+        with:
+          elixir-version: ${{ matrix.elixir-version }}
+          otp-version: ${{ matrix.otp-version }}
+
+      - name: Fetch deps
+        run: |
+          mix deps.get
+
+      - name: Run tests
+        run: |
+          # This is basically `mix test` with coverage enabled.
+          mix coveralls.json
+
+      - name: Lints
+        run: |
+          mix format --check-formatted
+          # This will mention FIXME and TODO comments without failing, any
+          # other issue fails the build.
+          mix credo

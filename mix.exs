@@ -5,9 +5,9 @@ defmodule TurnJunebugExpressway.Mixfile do
     [
       app: :turn_junebug_expressway,
       version: "0.0.18",
-      elixir: "~> 1.9",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -40,27 +40,32 @@ defmodule TurnJunebugExpressway.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.4"},
-      {:phoenix_pubsub, "~> 1.1"},
+      {:phoenix, "~> 1.7"},
+      {:phoenix_view, "~> 2.0"},
+      {:phoenix_pubsub, "~> 2.0"},
       {:ecto_sql, "~> 3.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:postgrex, ">= 0.15.0"},
       {:gettext, "~> 0.17.1"},
       {:prometheus_phoenix, "~> 1.3.0"},
       {:prometheus_plugs, "~> 1.1.5"},
-      {:prometheus_process_collector, "~> 1.6.0"},
+      # It looks like we don't actually need this.
+      # {:prometheus_process_collector, "~> 1.6.0"},
       {:plug_cowboy, "~> 2.1"},
       {:jason, "~> 1.1"},
-      {:amqp, "~> 1.3"},
+      {:amqp, "~> 3.3"},
       {:timex, "~> 3.5"},
       {:tesla, "~> 1.2"},
       {:mock, "~> 0.3.2"},
       {:mox, "~> 0.5", only: :test},
       {:sentry, "~> 7.2"},
 
+      # We need to override this to make it compile with newer Elixir/OTP.
+      {:ssl_verify_fun, "~> 1.1.5", manager: :rebar3, override: true},
+
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},
-      {:credo, "~> 0.9", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 
