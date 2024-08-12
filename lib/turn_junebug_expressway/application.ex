@@ -11,6 +11,8 @@ defmodule TurnJunebugExpressway.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
+      # Start Agent
+      {TurnJunebugExpressway.MessageRecipientIdCache, name: :my_cache},
       # Start the endpoint when the application starts
       TurnJunebugExpresswayWeb.Endpoint,
       # Start your own worker by calling: TurnJunebugExpressway.Worker.start_link(arg1, arg2, arg3)

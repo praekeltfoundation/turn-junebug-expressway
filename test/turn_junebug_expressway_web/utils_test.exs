@@ -4,6 +4,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
   import Mox
 
   alias TurnJunebugExpresswayWeb.Utils
+  alias TurnJunebugExpressway.MessageRecipientIdCache
 
   describe "format_urn" do
     test "format_urn/1 with + for turn" do
@@ -34,17 +35,57 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
   end
 
   describe "handle_incoming_event" do
+    test "sends event back to turn, recipient_id not found", %{} do
+      TurnJunebugExpressway.Backends.ClientMock
+      |> expect(:client, fn -> :client end)
+      |> expect(:post_event, fn :client, _ -> raise "Shouldnt be called" end)
+
+      message = %{
+        "content" => "something",
+        "recipient_id" => nil,
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+      }
+
+      Utils.send_message(message)
+
+      event = %{
+        "transport_name" => "d49d3569-47d5-47a0-8074-5a7ffa684832",
+        "event_type" => "ack",
+        "event_id" => "b3db4f670d4c4e2297c58a6dc5b72980",
+        "sent_message_id" => "f74c4e6108d8418ab53dbcfd628242f3",
+        "helper_metadata" => %{},
+        "routing_metadata" => %{},
+        "message_version" => "20110921",
+        "timestamp" => "2019-10-31 12:32:24.930687",
+        "transport_metadata" => %{},
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3",
+        "message_type" => "event"
+      }
+
+      # Utils.handle_incoming_event(Jason.encode!(event))
+
+      assert Utils.handle_incoming_event(Jason.encode!(event)) == nil
+    end
+
     test "sends event back to turn", %{} do
       body = %{
         "statuses" => [
           %{
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
-            "recipient_id" => nil,
+            "recipient_id" => "1234",
             "status" => "sent",
             "timestamp" => "1572525144"
           }
         ]
       }
+
+      message = %{
+        "content" => "something",
+        "recipient_id" => "1234",
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+      }
+
+      Utils.send_message(message)
 
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
@@ -72,12 +113,20 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "statuses" => [
           %{
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
-            "recipient_id" => nil,
+            "recipient_id" => 1234,
             "status" => "sent",
             "timestamp" => "1572525144930"
           }
         ]
       }
+
+      message = %{
+        "content" => "something",
+        "recipient_id" => "1234",
+        "user_message_id" => "16e42b66-03b7-4558-8a72-e9db481fdb4c"
+      }
+
+      Utils.send_message(message)
 
       TurnJunebugExpressway.Backends.ClientMock
       |> expect(:client, fn -> :client end)
@@ -160,6 +209,34 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
       }
 
       :ok = Utils.handle_incoming_event(Jason.encode!(event))
+    end
+  end
+
+  describe "ttl" do
+    test "checking if key is deleated after 3 seconds" do
+      message = %{
+        "content" => "something",
+        "recipient_id" => "1234",
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+      }
+
+      Utils.send_message(message, 1000)
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
+      :timer.sleep(3_000)
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
+    end
+
+    test "checking if key is deleated after default ttl" do
+      message = %{
+        "content" => "something",
+        "recipient_id" => "1234",
+        "user_message_id" => "f74c4e6108d8418ab53dbcfd628242f3"
+      }
+
+      Utils.send_message(message)
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == "1234"
+      :timer.sleep(11_000)
+      assert MessageRecipientIdCache.get(:my_cache, Map.get(message, "user_message_id")) == nil
     end
   end
 

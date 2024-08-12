@@ -5,6 +5,8 @@
 # is restricted to this project.
 import Config
 
+config :turn_junebug_expressway, :agent, ttl: System.get_env("RECIPIENT_ID_TTL", "10000")
+
 # Configures the endpoint
 config :turn_junebug_expressway, TurnJunebugExpresswayWeb.Endpoint,
   url: [host: "localhost"],
