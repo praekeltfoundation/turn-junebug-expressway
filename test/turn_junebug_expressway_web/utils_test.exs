@@ -72,7 +72,7 @@ defmodule TurnJunebugExpresswayWeb.UtilsTest do
         "statuses" => [
           %{
             "id" => "f74c4e6108d8418ab53dbcfd628242f3",
-            "to_addr" => "1234",
+            "recipient_id" => "1234",
             "status" => "sent",
             "timestamp" => "1572525144"
           }
