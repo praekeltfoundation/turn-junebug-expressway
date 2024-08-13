@@ -32,7 +32,7 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
   def format_message(conn) do
     {:ok, body} = Jason.decode(conn.private[:raw_body])
-
+    IO.puts("conn#{inspect(conn)}")
     # IO.puts(">>> format message")
     # # credo:disable-for-next-line
     # IO.inspect(body)
