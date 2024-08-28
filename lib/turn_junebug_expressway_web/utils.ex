@@ -32,7 +32,6 @@ defmodule TurnJunebugExpresswayWeb.Utils do
 
   def format_message(conn) do
     {:ok, body} = Jason.decode(conn.private[:raw_body])
-    IO.puts("conn#{inspect(conn)}")
     # IO.puts(">>> format message")
     # # credo:disable-for-next-line
     # IO.inspect(body)
@@ -64,9 +63,6 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def send_message(message, ttl) do
     key = Map.get(message, "message_id")
     value = Map.get(message, "to_addr")
-    IO.puts("send_message1")
-    IO.puts("#{inspect(message)}")
-    IO.puts("#{inspect(key)}, #{inspect(value)}")
     TurnJunebugExpressway.MessageRecipientIdCache.put(:my_cache, key, value, ttl)
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
@@ -74,9 +70,6 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   def send_message(message) do
     key = Map.get(message, "message_id")
     value = Map.get(message, "to_addr")
-    IO.puts("send_message2")
-    IO.puts("#{inspect(message)}")
-    IO.puts("#{inspect(key)}, #{inspect(value)}")
     TurnJunebugExpressway.MessageRecipientIdCache.put(:my_cache, key, value)
     TurnJunebugExpressway.MessageEngine.publish_message(message)
   end
@@ -129,12 +122,6 @@ defmodule TurnJunebugExpresswayWeb.Utils do
   end
 
   def forward_event(event) do
-    IO.puts("#{inspect(event)}")
-
-    IO.puts(
-      "#{inspect(MessageRecipientIdCache.get(:my_cache, Map.get(event, "user_message_id")))}"
-    )
-
     case event |> get_event_status do
       {:ignore, _} ->
         :ok
