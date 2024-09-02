@@ -4,6 +4,10 @@ VERSIONS
 Next Release
 ------------
 
+0.0.19
+-----------
+Adding a caching system for reciepient_id 
+
 0.0.18
 -----------
 Fix queue status in health check.
